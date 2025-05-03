@@ -7,6 +7,11 @@ const listarVeiculos = (req, res) => {
     res.status(200).json(veiculos);
 };
 
+const listarVeiculosDisponiveis = (req, res) => {
+    const veiculos = veiculos_model.listarVeiculosDisponiveis();
+    res.status(200).json(veiculos);
+};
+
 // POST
 const cadastrarVeiculo = (req, res) => {
     const { marca, modelo, ano, cor, preco } = req.body;
@@ -61,4 +66,5 @@ module.exports = {
     cadastrarVeiculo,
     editarVeiculo,
     comprarVeiculo,
+    listarVeiculosDisponiveis
 };

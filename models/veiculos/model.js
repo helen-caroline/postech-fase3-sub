@@ -6,6 +6,12 @@ const listarVeiculos = () => {
     return veiculos;
 };
 
+const listarVeiculosDisponiveis = () => {
+    return veiculos
+        .filter(veiculo => !veiculo.vendido) // Filtra veículos não vendidos
+        .sort((a, b) => a.preco - b.preco); // Ordena por preço (crescente)
+};
+
 // POST
 const adicionarVeiculo = (veiculo) => {
     const novoVeiculo = {
@@ -42,4 +48,5 @@ module.exports = {
     adicionarVeiculo,
     editarVeiculo,
     venderVeiculo,
+    listarVeiculosDisponiveis
 };
