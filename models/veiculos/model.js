@@ -76,14 +76,18 @@ const editarVeiculo = (id, dadosAtualizados) => {
     return veiculos[index];
 };
 
-// Função para marcar um veículo como vendido
+const verificarVeiculoDisponivel = (id) => {
+    const veiculo = veiculos.find(veiculo => veiculo.id === id);
+    return veiculo && !veiculo.vendido ? veiculo : null;
+};
+
 const venderVeiculo = (id) => {
-    const index = veiculos.findIndex(veiculo => veiculo.id === id);
-    if (index === -1 || veiculos[index].vendido) {
-        return null; // Veículo não encontrado ou já vendido
+    const veiculo = veiculos.find(veiculo => veiculo.id === id);
+    if (veiculo && !veiculo.vendido) {
+        veiculo.vendido = true;
+        return veiculo;
     }
-    veiculos[index].vendido = true;
-    return veiculos[index];
+    return null;
 };
 
 module.exports = { 
@@ -91,6 +95,7 @@ module.exports = {
     adicionarVeiculo,
     editarVeiculo,
     venderVeiculo,
+    verificarVeiculoDisponivel,
     listarVeiculosDisponiveis,
     listarVeiculosVendidos
 };

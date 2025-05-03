@@ -32,6 +32,31 @@ const cadastrarVeiculo = (req, res) => {
     res.status(201).json({ mensagem: 'Veículo cadastrado com sucesso!', veiculo });
 };
 
+const comprarVeiculo = (req, res) => {
+    const { usuarioId, veiculoId } = req.body;
+
+    // Verificar se o usuário está cadastrado
+    const usuario = usuarios_model.verificarUsuario(usuarioId); // Corrigido para usar usuarios_model
+    if (!usuario) {
+        return res.status(404).json({ erro: 'Usuário não encontrado.' });
+    }
+
+    // Verificar se o veículo está disponível
+    const veiculo = veiculos_model.verificarVeiculoDisponivel(veiculoId);
+    if (!veiculo) {
+        return res.status(404).json({ erro: 'Veículo não encontrado ou já vendido.' });
+    }
+
+    // Marcar o veículo como vendido
+    const veiculoVendido = veiculos_model.venderVeiculo(veiculoId);
+
+    res.status(200).json({
+        mensagem: 'Compra realizada com sucesso!',
+        veiculo: veiculoVendido,
+        usuario: usuario
+    });
+};
+
 // PUT
 const editarVeiculo = (req, res) => {
     const { id } = req.params;
@@ -46,24 +71,7 @@ const editarVeiculo = (req, res) => {
     res.status(200).json({ mensagem: 'Veículo atualizado com sucesso!', veiculo: veiculoAtualizado });
 };
 
-// POST - Comprar veículo
-const comprarVeiculo = (req, res) => {
-    const { usuarioId, veiculoId } = req.body;
 
-    // Verificar se o usuário está cadastrado
-    const usuario = usuarios_model.verificarUsuario(usuarioId);
-    if (!usuario) {
-        return res.status(404).json({ erro: 'Usuário não encontrado.' });
-    }
-
-    // Marcar o veículo como vendido
-    const veiculo = veiculos_model.venderVeiculo(parseInt(veiculoId));
-    if (!veiculo) {
-        return res.status(404).json({ erro: 'Veículo não encontrado ou já vendido.' });
-    }
-
-    res.status(200).json({ mensagem: 'Compra realizada com sucesso!', veiculo });
-};
 
 
 module.exports = {
