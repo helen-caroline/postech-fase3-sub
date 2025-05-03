@@ -1,5 +1,6 @@
 const veiculos_model = require('../../models/veiculos/model');
 const usuarios_model = require('../../models/usuarios/model');
+const vendas_model = require('../../models/vendas/model');
 
 // GET
 const listarVeiculos = (req, res) => {
@@ -36,7 +37,7 @@ const comprarVeiculo = (req, res) => {
     const { usuarioId, veiculoId } = req.body;
 
     // Verificar se o usuário está cadastrado
-    const usuario = usuarios_model.verificarUsuario(usuarioId); // Corrigido para usar usuarios_model
+    const usuario = usuarios_model.verificarUsuario(usuarioId);
     if (!usuario) {
         return res.status(404).json({ erro: 'Usuário não encontrado.' });
     }
@@ -50,10 +51,22 @@ const comprarVeiculo = (req, res) => {
     // Marcar o veículo como vendido
     const veiculoVendido = veiculos_model.venderVeiculo(veiculoId);
 
+    // Registrar a venda
+    const venda = vendas_model.registrarVenda({
+        compradorId: usuarioId,
+        veiculoId: veiculoId
+    });
+
+    // Retornar a resposta com os dados do comprador
     res.status(200).json({
         mensagem: 'Compra realizada com sucesso!',
+        venda,
         veiculo: veiculoVendido,
-        usuario: usuario
+        comprador: {
+            id: usuario.id,
+            nome: usuario.nome,
+            email: usuario.email
+        }
     });
 };
 
