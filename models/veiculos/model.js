@@ -1,5 +1,42 @@
 // Simulação de banco de dados
-let veiculos = [];
+let veiculos = [
+    {
+        id: 1,
+        marca: "Toyota",
+        modelo: "Corolla",
+        ano: 2020,
+        cor: "Prata",
+        preco: 75000,
+        vendido: false
+    },
+    {
+        id: 2,
+        marca: "Honda",
+        modelo: "Civic",
+        ano: 2019,
+        cor: "Preto",
+        preco: 85000,
+        vendido: false
+    },
+    {
+        id: 3,
+        marca: "Fiat",
+        modelo: "Uno",
+        ano: 2015,
+        cor: "Branco",
+        preco: 25000,
+        vendido: true
+    },
+    {
+        id: 4,
+        marca: "Ford",
+        modelo: "Ka",
+        ano: 2018,
+        cor: "Vermelho",
+        preco: 30000,
+        vendido: false
+    }
+];
 
 // GET
 const listarVeiculos = () => {
@@ -9,6 +46,12 @@ const listarVeiculos = () => {
 const listarVeiculosDisponiveis = () => {
     return veiculos
         .filter(veiculo => !veiculo.vendido) // Filtra veículos não vendidos
+        .sort((a, b) => a.preco - b.preco); // Ordena por preço (crescente)
+};
+
+const listarVeiculosVendidos = () => {
+    return veiculos
+        .filter(veiculo => veiculo.vendido) // Filtra veículos vendidos
         .sort((a, b) => a.preco - b.preco); // Ordena por preço (crescente)
 };
 
@@ -48,5 +91,6 @@ module.exports = {
     adicionarVeiculo,
     editarVeiculo,
     venderVeiculo,
-    listarVeiculosDisponiveis
+    listarVeiculosDisponiveis,
+    listarVeiculosVendidos
 };
