@@ -4,7 +4,7 @@ const controller = require('../../controllers/veiculos/controller');
 
 // GET
 router.get('/viewer', controller.listarVeiculos);
-router.get('/disponiveis', controller.listarVeiculosDisponiveis);
+router.get('/available', controller.listarVeiculosDisponiveis);
 
 // POST
 router.post('/create', controller.cadastrarVeiculo);
