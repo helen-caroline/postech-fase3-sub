@@ -16,7 +16,13 @@ const listarUsuarios = () => {
     return usuarios;
 };
 
+// Função para verificar se um usuário está cadastrado
+const verificarUsuario = (id) => {
+    return usuarios.find(usuario => usuario.id === id);
+};
+
 module.exports = {
     cadastrarUsuario,
     listarUsuarios,
+    verificarUsuario
 };
