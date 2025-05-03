@@ -57,6 +57,20 @@ const comprarVeiculo = (req, res) => {
         veiculoId: veiculoId
     });
 
+    // Formatar a data para UTC do Brasil
+    const dataFormatada = new Intl.DateTimeFormat('pt-BR', {
+        timeZone: 'America/Sao_Paulo',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    }).format(new Date());
+
+    // Atualizar a data da venda
+    venda.data = dataFormatada;
+
     // Retornar a resposta com os dados do comprador
     res.status(200).json({
         mensagem: 'Compra realizada com sucesso!',
