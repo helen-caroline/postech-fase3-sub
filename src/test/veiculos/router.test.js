@@ -1,26 +1,33 @@
-// routers/veiculos/router.test.js
 const request = require('supertest');
 const express = require('express');
 const veiculosRouter = require('../../routers/veiculos/router');
+const veiculosModel = require('../../models/veiculos/model');
+
+jest.mock('../../models/veiculos/model', () => ({
+    listarVeiculos: jest.fn(),
+    adicionarVeiculo: jest.fn(),
+    editarVeiculo: jest.fn(),
+    listarVeiculosDisponiveis: jest.fn(),
+    listarVeiculosVendidos: jest.fn()
+}));
 
 const app = express();
 app.use(express.json());
 app.use('/veiculos', veiculosRouter);
 
-describe('Testes para as rotas de veículos', () => {
-    test('GET /veiculos/viewer deve listar veículos', async () => {
-        const response = await request(app).get('/veiculos/viewer');
-        expect(response.status).toBe(200);
-        // Adicione mais verificações conforme necessário
+describe('Testes para as rotas de veículos com middlewares', () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
     });
 
-    test('GET /veiculos/available deve listar veículos disponíveis', async () => {
-        const response = await request(app).get('/veiculos/available');
-        expect(response.status).toBe(200);
-        // Adicione mais verificações conforme necessário
+    test('POST /veiculos/create deve retornar erro se os dados forem inválidos', async () => {
+        const veiculoInvalido = { marca: 'Toyota', modelo: 'Corolla' }; // Faltando campos obrigatórios
+        const response = await request(app).post('/veiculos/create').send(veiculoInvalido);
+        expect(response.status).toBe(400);
+        expect(response.body).toEqual({ erro: 'Todos os campos (marca, modelo, ano, cor, preco) são obrigatórios.' });
     });
 
-    test('POST /veiculos/create deve cadastrar um veículo', async () => {
+    test('POST /veiculos/create deve cadastrar um veículo se os dados forem válidos', async () => {
         const novoVeiculo = {
             marca: 'Toyota',
             modelo: 'Corolla',
@@ -28,15 +35,41 @@ describe('Testes para as rotas de veículos', () => {
             cor: 'Branco',
             preco: 120000
         };
+        veiculosModel.adicionarVeiculo.mockReturnValue({ id: 1, ...novoVeiculo });
+    
         const response = await request(app).post('/veiculos/create').send(novoVeiculo);
-        expect(response.status).toBe(201); // Supondo que o status de sucesso seja 201
-        // Adicione mais verificações conforme necessário
+        expect(response.status).toBe(201);
+        expect(response.body).toEqual({
+            mensagem: 'Veículo cadastrado com sucesso!',
+            veiculo: { id: 1, ...novoVeiculo }
+        });
     });
 
-    test('PUT /veiculos/update/:id deve atualizar um veículo', async () => {
-        const veiculoAtualizado = { modelo: 'Carro Y', ano: 2023 };
-        const response = await request(app).put('/veiculos/update/1').send(veiculoAtualizado);
+    test('PUT /veiculos/update/:id deve retornar erro se o veículo não existir', async () => {
+        veiculosModel.listarVeiculos.mockReturnValue([]);
+        const response = await request(app).put('/veiculos/update/99').send({ modelo: 'Novo Modelo' });
+        expect(response.status).toBe(404);
+        expect(response.body).toEqual({ erro: 'Veículo não encontrado.' });
+    });
+
+    test('PUT /veiculos/update/:id deve atualizar um veículo se ele existir', async () => {
+        const veiculoExistente = {
+            id: 1,
+            marca: 'Toyota',
+            modelo: 'Corolla',
+            ano: 2020,
+            cor: 'Prata',
+            preco: 75000,
+            vendido: false
+        };
+        veiculosModel.listarVeiculos.mockReturnValue([veiculoExistente]);
+        veiculosModel.editarVeiculo.mockReturnValue({ ...veiculoExistente, modelo: 'Novo Modelo' });
+    
+        const response = await request(app).put('/veiculos/update/1').send({ modelo: 'Novo Modelo' });
         expect(response.status).toBe(200);
-        // Adicione mais verificações conforme necessário
+        expect(response.body).toEqual({
+            mensagem: 'Veículo atualizado com sucesso!',
+            veiculo: { ...veiculoExistente, modelo: 'Novo Modelo' }
+        });
     });
 });
