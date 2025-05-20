@@ -9,7 +9,6 @@ router.get('/sold', controller.listarVeiculosVendidos);
 
 // POST
 router.post('/create', controller.cadastrarVeiculo);
-router.post('/buy', controller.comprarVeiculo);
 
 // PUT
 router.put('/update/:id', controller.editarVeiculo);

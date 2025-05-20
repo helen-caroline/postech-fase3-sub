@@ -76,26 +76,10 @@ const editarVeiculo = (id, dadosAtualizados) => {
     return veiculos[index];
 };
 
-const verificarVeiculoDisponivel = (id) => {
-    const veiculo = veiculos.find(veiculo => veiculo.id === id);
-    return veiculo && !veiculo.vendido ? veiculo : null;
-};
-
-const venderVeiculo = (id) => {
-    const veiculo = veiculos.find(veiculo => veiculo.id === id);
-    if (veiculo && !veiculo.vendido) {
-        veiculo.vendido = true;
-        return veiculo;
-    }
-    return null;
-};
-
 module.exports = { 
     listarVeiculos,
     adicionarVeiculo,
     editarVeiculo,
-    venderVeiculo,
-    verificarVeiculoDisponivel,
     listarVeiculosDisponiveis,
     listarVeiculosVendidos
 };
