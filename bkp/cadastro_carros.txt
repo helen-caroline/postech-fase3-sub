@@ -1,0 +1,14 @@
+{
+    "marca": "Honda",
+    "modelo": "Civic",
+    "ano": 2021,
+    "cor": "Preto",
+    "preco": 85000
+}
+{
+    "marca": "Volksvagen",
+    "modelo": "virtus",
+    "ano": 2025,
+    "cor": "cinxza platinum",
+    "preco": 150000
+}

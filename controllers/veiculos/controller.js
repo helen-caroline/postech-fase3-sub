@@ -34,10 +34,11 @@ const cadastrarVeiculo = (req, res) => {
 };
 
 const comprarVeiculo = (req, res) => {
-    const { usuarioId, veiculoId } = req.body;
+    const veiculoId = req.body.veiculoId;
+    const compradorId = req.compradorId; // ID do comprador autenticado
 
-    // Verificar se o usuário está cadastrado
-    const usuario = usuarios_model.verificarUsuario(usuarioId);
+    // Verificar se o comprador está cadastrado
+    const usuario = usuarios_model.verificarUsuario(compradorId);
     if (!usuario) {
         return res.status(404).json({ erro: 'Usuário não encontrado.' });
     }
@@ -53,8 +54,8 @@ const comprarVeiculo = (req, res) => {
 
     // Registrar a venda
     const venda = vendas_model.registrarVenda({
-        compradorId: usuarioId,
-        veiculoId: veiculoId
+        compradorId,
+        veiculoId
     });
 
     // Formatar a data para UTC do Brasil
