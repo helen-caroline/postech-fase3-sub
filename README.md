@@ -46,15 +46,18 @@ Rota: GET /vendas/viewer
 Exemplo de uso:
 curl -X GET http://localhost:3000/vendas/viewer
 
-2. Registrar uma venda
+2. Registra uma venda
 Rota: POST /vendas/create
 Corpo da requisição (JSON):
 {
   "veiculoId": 1,
-  "comprador": "Maria Oliveira"
+  "usuarioId": "2"
 }
 Exemplo de uso:
-curl -X POST http://localhost:3000/vendas/create -H "Content-Type: application/json" -d '{"veiculoId":1,"comprador":"Maria Oliveira"}'
+curl -X POST http://localhost:3000/vendas/create \
+-H "Content-Type: application/json" \
+-d '{"veiculoId": 1, "usuarioId": 2}'
+
 
 3. Comprar um veículo
 Rota: POST /vendas/buy
@@ -67,6 +70,12 @@ Exemplo de uso:
 curl -X POST http://localhost:3000/vendas/buy \
 -H "Content-Type: application/json" \
 -d '{"veiculoId": 1, "usuarioId": 2}'
+
+OBS: Quando uma compra é veita através dessa rota, 
+um registro de venda é feito automaticamente acionando a rota vendas/create.
+
+Voce pode encontrar o metodo correspondente em no caminho relativo abaixo
+src\controllers\vendas\controller.js
 
 # Usuarios
 1. Listar todos os usuários cadastrados
