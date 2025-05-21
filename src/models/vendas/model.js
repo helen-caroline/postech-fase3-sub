@@ -1,5 +1,3 @@
-const model = require('../veiculos/model');
-
 // Simulação de banco de dados para vendas
 let vendas = [];
 

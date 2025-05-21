@@ -1,8 +1,8 @@
-const usuarios_model = require('../../models/usuarios/model');
+const model_usuarios = require('../../models/usuarios/model');
 
 // GET
 const listarUsuarios = (req, res) => {
-    const usuarios = usuarios_model.listarUsuarios();
+    const usuarios = model_usuarios.listarUsuarios();
     res.status(200).json(usuarios);
 };
 
@@ -14,7 +14,7 @@ const cadastrarUsuario = (req, res) => {
         return res.status(400).json({ erro: 'Nome e email são obrigatórios.' });
     }
 
-    const usuario = usuarios_model.cadastrarUsuario({ nome, email });
+    const usuario = model_usuarios.cadastrarUsuario({ nome, email });
     res.status(201).json({ mensagem: 'Usuário cadastrado com sucesso!', usuario });
 };
 

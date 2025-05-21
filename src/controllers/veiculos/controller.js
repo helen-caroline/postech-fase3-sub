@@ -1,6 +1,4 @@
 const model = require('../../models/veiculos/model');
-const model_usuarios = require('../../models/usuarios/model');
-const model_vendas = require('../../models/vendas/model');
 
 // GET
 const listarVeiculos = (req, res) => {
