@@ -8,5 +8,6 @@ router.get('/viewer', controller.listarVendas);
 
 // POST
 router.post('/create', middleware.validarDadosVenda, controller.registrarVenda);
+router.post('/buy', middleware.validarDadosVenda, controller.registrarVenda);
 
 module.exports = router;

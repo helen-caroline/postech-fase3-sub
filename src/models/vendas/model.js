@@ -3,24 +3,14 @@ const model = require('../veiculos/model');
 // Simulação de banco de dados para vendas
 let vendas = [];
 
-// Função para registrar uma venda
-const registrarVenda = (idVeiculo, comprador) => {
-    const veiculo = model.listarVeiculos().find(v => v.id === idVeiculo);
-
-    if (!veiculo || veiculo.vendido) {
-        return null; // Veículo não encontrado ou já vendido
-    }
-
-    // Marca o veículo como vendido
-    veiculo.vendido = true;
-
+// Registrar venda
+const registrarVenda = (veiculoId, usuarioId) => {
     const novaVenda = {
         id: vendas.length + 1,
-        veiculoId: idVeiculo,
-        comprador,
-        data: new Date().toISOString()
+        veiculoId,
+        usuarioId,
+        data: new Date()
     };
-
     vendas.push(novaVenda);
     return novaVenda;
 };

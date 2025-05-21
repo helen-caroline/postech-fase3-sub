@@ -68,7 +68,7 @@ const adicionarVeiculo = (veiculo) => {
 
 // PUT
 const editarVeiculo = (id, dadosAtualizados) => {
-    const index = veiculos.findIndex(veiculo => veiculo.id === id);
+    const index = veiculos.findIndex(veiculo => veiculo.id === parseInt(id)); // Certifique-se de usar parseInt
     if (index === -1) {
         return null;
     }
@@ -81,5 +81,5 @@ module.exports = {
     adicionarVeiculo,
     editarVeiculo,
     listarVeiculosDisponiveis,
-    listarVeiculosVendidos
+    listarVeiculosVendidos,
 };
