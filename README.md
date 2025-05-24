@@ -92,6 +92,8 @@ Isso redirecionará para o Keycloak e, em seguida, para a URL configurada no red
 
 -----------------------------------------------------------------------------------------------------
 
+## Como Utilizar as rotas existentes da API
+
 ### Veiculos
 1. Listar todos os veículos cadastrados
 Rota: GET /veiculos/viewer
