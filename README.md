@@ -84,7 +84,8 @@ POST /usuarios/create
 ```
 
 ### Logout
-Para realizar o logout, acesse a rota:
+Para realizar o logout, acesse a rota: 
+
 ```GET http://localhost:3000/logout```
 
 Isso redirecionará para o Keycloak e, em seguida, para a URL configurada no redirect_uri.
