@@ -1,16 +1,16 @@
 # postech-fase3-sub
 Trabalho fase 3 , substitutiva
 
-## Autenticação com Keycloak
+### Autenticação com Keycloak
 Esta API utiliza o Keycloak para gerenciar autenticação e autorização. Para acessar as rotas protegidas, você precisa obter um token de acesso (Access Token) e incluí-lo no cabeçalho Authorization das requisições.
 
-# Configuração do Keycloak
+### Configuração do Keycloak
 URL do Keycloak: Certifique-se de que o Keycloak está rodando em http://localhost:8080.
 Realm: postech-fase3
 Client: api-compradores
 Client Secret: Configurado no Keycloak (veja no painel administrativo do cliente).
 
-# Como Obter o Token de Acesso
+### Como Obter o Token de Acesso
 1. Faça uma requisição POST para o endpoint de token do Keycloak:
 ```POST http://localhost:8080/realms/postech-fase3/protocol/openid-connect/token```
 
@@ -47,7 +47,7 @@ curl -X POST http://localhost:8080/realms/postech-fase3/protocol/openid-connect/
 
 4. Copie o valor do campo access_token.
 
-# Como Usar o Token de Acesso
+### Como Usar o Token de Acesso
 Inclua o token de acesso no cabeçalho Authorization das requisições para rotas protegidas. O formato deve ser:
 ```Authorization: Bearer SEU_ACCESS_TOKEN```
 
@@ -79,13 +79,13 @@ GET /usuarios/viewer
 POST /usuarios/create
 ```
 
-# Logout
+### Logout
 Para realizar o logout, acesse a rota:
 ```GET http://localhost:3000/logout```
 
 Isso redirecionará para o Keycloak e, em seguida, para a URL configurada no redirect_uri.
 
-# Veiculos
+### Veiculos
 1. Listar todos os veículos cadastrados
 Rota: GET /veiculos/viewer
 Exemplo de uso:
@@ -126,7 +126,7 @@ Corpo da requisição (JSON):
 Exemplo de uso:
 curl -X PUT http://localhost:3000/veiculos/update/1 -H "Content-Type: application/json" -d '{"modelo":"Novo Modelo"}'
 
-## Vendas
+### Vendas
 1. Listar todas as vendas
 Rota: GET /vendas/viewer
 Exemplo de uso:
@@ -163,7 +163,7 @@ um registro de venda é feito automaticamente acionando a rota vendas/create.
 Voce pode encontrar o metodo correspondente em no caminho relativo abaixo
 src\controllers\vendas\controller.js
 
-# Usuarios
+### Usuarios
 1. Listar todos os usuários cadastrados
 Rota: GET /usuarios/viewer
 Exemplo de uso:
