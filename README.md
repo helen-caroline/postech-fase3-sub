@@ -90,6 +90,8 @@ Para realizar o logout, acesse a rota:
 
 Isso redirecionará para o Keycloak e, em seguida, para a URL configurada no redirect_uri.
 
+-----------------------------------------------------------------------------------------------------
+
 ### Veiculos
 1. Listar todos os veículos cadastrados
 Rota: GET /veiculos/viewer
