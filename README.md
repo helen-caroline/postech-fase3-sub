@@ -97,11 +97,11 @@ Isso redirecionará para o Keycloak e, em seguida, para a URL configurada no red
 ### Veiculos
 1. Listar todos os veículos cadastrados
 
-Rota: ```GET /veiculos/viewer```
+  Rota: ```GET /veiculos/viewer```
 
-Exemplo de uso:
+  Exemplo de uso:
 
-```curl -X GET http://localhost:3000/veiculos/viewer```
+  ```curl -X GET http://localhost:3000/veiculos/viewer```
 
 2. Listar todos os veículos disponíveis
 Rota: GET /veiculos/available
