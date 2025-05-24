@@ -62,11 +62,13 @@ curl -X GET http://localhost:3000/veiculos/viewer \
 ## Rotas Protegidas
 As seguintes rotas requerem autenticação com o token de acesso:
 - Veículos
+```
 GET /veiculos/viewer
 GET /veiculos/available
 GET /veiculos/sold
 POST /veiculos/create
 PUT /veiculos/update/:id
+```
 
 - Vendas
 ```
