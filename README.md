@@ -1,7 +1,7 @@
 # postech-fase3-sub
 Trabalho fase 3 , substitutiva
 
-### Autenticação com Keycloak
+## Keycloak
 Esta API utiliza o Keycloak para gerenciar autenticação e autorização. Para acessar as rotas protegidas, você precisa obter um token de acesso (Access Token) e incluí-lo no cabeçalho Authorization das requisições.
 
 ### Configuração do Keycloak
