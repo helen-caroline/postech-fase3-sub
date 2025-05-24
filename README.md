@@ -6,9 +6,11 @@ Esta API utiliza o Keycloak para gerenciar autenticação e autorização. Para 
 
 ### Configuração do Keycloak
 URL do Keycloak: Certifique-se de que o Keycloak está rodando em http://localhost:8080.
+```
 Realm: postech-fase3
 Client: api-compradores
 Client Secret: Configurado no Keycloak (veja no painel administrativo do cliente).
+```
 
 ### Como Obter o Token de Acesso
 1. Faça uma requisição POST para o endpoint de token do Keycloak:
