@@ -26,4 +26,22 @@ const createUser = async (accessToken, userData) => {
     return response.data;
 };
 
-module.exports = { getAccessToken, createUser };
+// Função para deletar um usuário no Keycloak
+const DeleteUser = async (accessToken, userId) => {
+    const response = await axios.delete(
+        `${HOSTNAME_KEYCLOAK}/admin/realms/${REALM}/users/${userId}`,
+        {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+        }
+    );
+    return response.data;
+};
+
+module.exports = { 
+    getAccessToken, 
+    createUser,
+    DeleteUser,
+};
