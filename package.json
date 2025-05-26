@@ -2,12 +2,12 @@
     "name": "postech-fase3-sub",
     "version": "1.0.0",
     "description": "Trabalho fase 3 , substitutiva",
-    "main": "app.js",
+    "main": "server.js",
     "type": "commonjs",
     "scripts": {
         "test": "jest",
-        "start": "node src/app.js",
-        "dev": "nodemon src/app.js"
+        "start": "node src/server.js",
+        "dev": "nodemon src/server.js"
     },
     "keywords": [],
     "author": "",

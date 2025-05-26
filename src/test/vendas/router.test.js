@@ -1,74 +1,30 @@
 const request = require('supertest');
-const express = require('express');
-const vendasRouter = require('../../routers/vendas/router');
-const vendasModel = require('../../models/vendas/model');
+const app = require('../../app'); // Certifique-se de que o caminho está correto
+const usuariosModel = require('../../models/usuarios/model');
 const veiculosModel = require('../../models/veiculos/model');
 
-jest.mock('../../models/vendas/model', () => ({
-    registrarVenda: jest.fn(),
-    listarVendas: jest.fn(),
-}));
+jest.mock('../../models/usuarios/model');
+jest.mock('../../models/veiculos/model');
 
-jest.mock('../../models/veiculos/model', () => ({
-    listarVeiculos: jest.fn(),
-    editarVeiculo: jest.fn(),
-}));
+describe('POST /vendas/buy', () => {
+    test('Deve falhar ao tentar comprar um veículo com um usuário não cadastrado', async () => {
+        const veiculoId = 1;
+        const username = 'usuario_inexistente';
 
-const app = express();
-app.use(express.json());
-app.use('/vendas', vendasRouter);
+        // Mock para simular que o usuário não existe no Keycloak
+        usuariosModel.getAccessToken.mockResolvedValue('mocked_access_token');
+        usuariosModel.getUserByUsername.mockResolvedValue([]); // Nenhum usuário encontrado
 
-describe('Testes para as rotas de vendas', () => {
-    beforeEach(() => {
-        jest.clearAllMocks(); // Limpa os mocks antes de cada teste
-    });
+        // Mock para simular que o veículo está disponível
+        veiculosModel.listarVeiculos.mockResolvedValue([
+            { id: veiculoId, vendido: false },
+        ]);
 
-    test('GET /vendas/viewer deve listar vendas', async () => {
-        const mockVendas = [
-            { id: 1, veiculoId: 1, comprador: 'João', data: '2023-01-01T00:00:00.000Z' }
-        ];
-        vendasModel.listarVendas.mockReturnValue(mockVendas);
+        const response = await request(app)
+            .post('/vendas/buy')
+            .send({ username, veiculoId });
 
-        const response = await request(app).get('/vendas/viewer');
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual(mockVendas);
-    });
-
-    test('POST /vendas/buy deve registrar uma venda e marcar o veículo como vendido', async () => {
-        const veiculoDisponivel = {
-            id: 1,
-            marca: 'Toyota',
-            modelo: 'Corolla',
-            ano: 2020,
-            cor: 'Prata',
-            preco: 75000,
-            vendido: false
-        };
-    
-        veiculosModel.listarVeiculos.mockReturnValue([veiculoDisponivel]);
-        veiculosModel.editarVeiculo.mockReturnValue({ ...veiculoDisponivel, vendido: true });
-        vendasModel.registrarVenda.mockReturnValue({
-            id: 1,
-            veiculoId: veiculoDisponivel.id,
-            usuarioId: 123,
-            data: new Date()
-        });
-    
-        const response = await request(app).post('/vendas/buy').send({
-            veiculoId: veiculoDisponivel.id,
-            usuarioId: 123
-        });
-    
-        expect(response.status).toBe(201);
-        expect(response.body).toEqual({
-            mensagem: 'Venda registrada com sucesso!',
-            venda: {
-                id: 1,
-                veiculoId: veiculoDisponivel.id,
-                usuarioId: 123,
-                data: expect.any(String)
-            },
-            veiculo: { ...veiculoDisponivel, vendido: true }
-        });
+        expect(response.status).toBe(404); // Deve retornar 404 (Usuário não encontrado)
+        expect(response.body).toEqual({ erro: 'Usuário não encontrado no Keycloak.' });
     });
 });

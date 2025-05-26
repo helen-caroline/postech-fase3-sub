@@ -26,8 +26,4 @@ app.use('/veiculos', veiculos_router);
 app.use('/usuarios', usuarios_router);
 app.use('/vendas', vendas_router);
 
-// Iniciar o servidor
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-});
+module.exports = app; // Exporta apenas a instância do Express
