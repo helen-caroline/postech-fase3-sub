@@ -1,5 +1,44 @@
 const model = require('../../models/usuarios/model');
 
+const getAllUsersController = async (req, res) => {
+    try {
+        // Obter o token de acesso
+        const accessToken = await model.getAccessToken();
+
+        // Buscar todos os usuários no Keycloak
+        const users = await model.getAllUsers(accessToken);
+
+        // Enviar a resposta ao cliente
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Erro ao buscar todos os usuários:', error.response?.data || error.message);
+        res.status(500).json({ error: 'Erro ao buscar todos os usuários', details: error.response?.data || error.message });
+    }
+};
+
+const getUserBYController = async (req, res) => {
+    try {
+        // Obter o token de acesso
+        const accessToken = await model.getAccessToken();
+
+        // Obter o username da rota (parâmetro de URL)
+        const { username } = req.params;
+
+        if (!username) {
+            return res.status(400).json({ error: 'O username é obrigatório.' });
+        }
+
+        // Buscar o usuário no Keycloak
+        const users = await model.getUserByUsername(accessToken, username);
+
+        // Enviar a resposta ao cliente
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Erro ao buscar o usuário:', error.response?.data || error.message);
+        res.status(500).json({ error: 'Erro ao buscar o usuário', details: error.response?.data || error.message });
+    }
+};
+
 const createUserController = async (req, res) => {
     try {
         // Obter o token de acesso
@@ -79,7 +118,9 @@ const updateUserController = async (req, res) => {
     }
 };
 
-module.exports = { 
+module.exports = {
+    getAllUsersController,
+    getUserBYController,
     createUserController,
     deleteUserController,
     updateUserController

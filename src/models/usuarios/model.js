@@ -11,6 +11,35 @@ const getAccessToken = async () => {
     return tokenResponse.data.access_token;
 };
 
+// Função para buscar todos os usuários no Keycloak
+const getAllUsers = async (accessToken) => {
+    const response = await axios.get(
+        `${HOSTNAME_KEYCLOAK}/admin/realms/${REALM}/users`,
+        {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+        }
+    );
+    return response.data;
+};
+
+// Função para buscar um usuário pelo username no Keycloak
+const getUserByUsername = async (accessToken, username) => {
+    const response = await axios.get(
+        `${HOSTNAME_KEYCLOAK}/admin/realms/${REALM}/users`,
+        {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+            params: { username }, // Passa o username como parâmetro
+        }
+    );
+    return response.data;
+};
+
 // Função para criar um usuário no Keycloak
 const createUser = async (accessToken, userData) => {
     const response = await axios.post(
@@ -59,5 +88,7 @@ module.exports = {
     getAccessToken, 
     createUser,
     deleteUser,
-    updateUser
+    updateUser,
+    getUserByUsername,
+    getAllUsers
 };
