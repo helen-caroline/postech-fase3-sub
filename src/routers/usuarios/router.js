@@ -1,14 +1,11 @@
 const express = require('express');
+const { createUserController } = require('../../controllers/usuarios/controller');
+
 const router = express.Router();
-const controller = require('../../controllers/usuarios/controller');
-const middleware = require('../../middleware/usuarios/middleware');
 
-// GET
-router.get('/viewer', controller.listarUsuarios);
+console.log("createUserController:", createUserController);
 
-// POST
-router.post('/create', middleware.validarDadosUsuario, middleware.verificarUsuarioExistente, controller.cadastrarUsuario);
-
-// PUT
+// Rota para criar usuário
+router.post('/create', createUserController);
 
 module.exports = router;

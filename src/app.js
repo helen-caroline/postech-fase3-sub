@@ -1,5 +1,6 @@
 const express = require('express');
-const { router: keycloakRouter, keycloak } = require("./routers/keycloack/router");
+
+const keycloack_router = require('./routers/keycloack/router').router;
 const veiculos_router = require('./routers/veiculos/router');
 const usuarios_router = require('./routers/usuarios/router');
 const vendas_router = require('./routers/vendas/router');
@@ -18,12 +19,12 @@ app.get('/health', (req, res) => {
 });
 
 // Rotas do Keycloak
-app.use('/keycloak', keycloakRouter);
+app.use('/keycloak', keycloack_router);
 
 // Rotas protegidas
-app.use('/veiculos', keycloak.protect(), veiculos_router);
-app.use('/usuarios', keycloak.protect(), usuarios_router);
-app.use('/vendas', keycloak.protect(), vendas_router);
+app.use('/veiculos', veiculos_router);
+app.use('/usuarios', usuarios_router);
+app.use('/vendas', vendas_router);
 
 // Iniciar o servidor
 const PORT = 3000;
