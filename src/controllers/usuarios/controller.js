@@ -35,7 +35,7 @@ const deleteUserController = async (req, res) => {
         }
 
         // Deletar o usuário no Keycloak
-        await model.DeleteUser(accessToken, userId);
+        await model.deleteUser(accessToken, userId);
         console.log("Usuário deletado com sucesso:", userId);
 
         // Enviar uma resposta ao cliente
@@ -46,7 +46,41 @@ const deleteUserController = async (req, res) => {
     }
 };
 
+const updateUserController = async (req, res) => {
+    try {
+        // Obter o token de acesso
+        const accessToken = await model.getAccessToken();
+        console.log("Token obtido:", accessToken);
+
+        // Obter o ID do usuário e os dados a serem atualizados do corpo da requisição
+        const { userId, username, ...updateData } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({ error: 'O ID do usuário é obrigatório.' });
+        }
+
+        // Verificar se o campo username está presente
+        if (username) {
+            return res.status(400).json({
+                error: 'O campo "username" não pode ser alterado.',
+                message: 'Se precisar alterar o username, delete o usuário e crie-o novamente.',
+            });
+        }
+
+        // Atualizar o usuário no Keycloak
+        await model.updateUser(accessToken, userId, updateData);
+        console.log("Usuário atualizado com sucesso:", userId);
+
+        // Enviar uma resposta ao cliente
+        res.status(200).json({ message: 'Usuário atualizado com sucesso' });
+    } catch (error) {
+        console.error('Erro ao atualizar o usuário:', error.response?.data || error.message);
+        res.status(500).json({ error: 'Erro ao atualizar o usuário', details: error.response?.data || error.message });
+    }
+};
+
 module.exports = { 
     createUserController,
-    deleteUserController
+    deleteUserController,
+    updateUserController
 };

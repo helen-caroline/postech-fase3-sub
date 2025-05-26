@@ -11,4 +11,7 @@ router.post('/create', controller.createUserController);
 // Rota para deletar usuário
 router.delete('/delete', controller.deleteUserController);
 
+// Rota para atualizar usuário
+router.put('/update', controller.updateUserController);
+
 module.exports = router;
