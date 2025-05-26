@@ -1,50 +1,66 @@
 const model = require('../../models/vendas/model');
 const model_veiculos = require('../../models/veiculos/model');
+const model_usuarios = require('../../models/usuarios/model');
 
-// GET - Listar vendas
-const listarVendas = (req, res) => {
-    const vendas = model.listarVendas();
-    res.status(200).json(vendas);
-};
-
-// POST - Registrar venda
-const registrarVenda = (req, res) => {
+const registrarVendaController = async (req, res) => {
     try {
-        const { veiculoId, usuarioId } = req.body;
+        const { username, veiculoId } = req.body;
 
-        if (!veiculoId || !usuarioId) {
-            return res.status(400).json({ erro: 'ID do veículo e ID do usuário são obrigatórios.' });
+        // Validar os dados da requisição
+        if (!username || !veiculoId) {
+            return res.status(400).json({ erro: 'Username e ID do veículo são obrigatórios.' });
         }
 
-        const veiculo = model_veiculos.listarVeiculos().find(v => v.id === veiculoId && !v.vendido);
+        // Obter o token de acesso
+        const accessToken = await model_usuarios.getAccessToken();
+
+        // Buscar o usuário pelo username no Keycloak
+        const usuarios = await model_usuarios.getUserByUsername(accessToken, username);
+        if (!usuarios || usuarios.length === 0) {
+            return res.status(404).json({ erro: 'Usuário não encontrado no Keycloak.' });
+        }
+        const usuarioId = usuarios[0].id;
+
+        // Verificar se o veículo está disponível
+        const veiculos = await model_veiculos.listarVeiculos();
+        const veiculo = veiculos.find(v => v.id === veiculoId && !v.vendido);
         if (!veiculo) {
-            return res.status(400).json({ erro: 'Veículo não encontrado ou já vendido.' });
+            return res.status(400).json({ erro: 'Veículo não disponível para venda.' });
         }
 
-        const veiculoAtualizado = model_veiculos.editarVeiculo(veiculoId, { vendido: true });
-        if (!veiculoAtualizado) {
-            console.error('Erro ao atualizar o veículo.');
-            return res.status(500).json({ erro: 'Erro ao atualizar o status do veículo.' });
-        }
+        // Registrar a venda
+        const venda = await model.registrarVenda({
+            veiculoId,
+            usuarioId,
+            data: new Date(),
+        });
 
-        const novaVenda = model.registrarVenda(veiculoId, usuarioId);
-        if (!novaVenda) {
-            console.error('Erro ao registrar a venda.');
-            return res.status(500).json({ erro: 'Erro ao registrar a venda.' });
-        }
+        // Atualizar o status do veículo para "vendido"
+        const veiculoAtualizado = await model_veiculos.editarVeiculo(veiculoId, { vendido: true });
 
+        // Retornar a resposta
         res.status(201).json({
             mensagem: 'Venda registrada com sucesso!',
-            venda: novaVenda,
-            veiculo: veiculoAtualizado
+            venda,
+            veiculo: veiculoAtualizado,
         });
     } catch (error) {
-        console.error('Erro inesperado:', error);
-        res.status(500).json({ erro: 'Erro inesperado no servidor.' });
+        console.error('Erro ao registrar a venda:', error.message);
+        res.status(500).json({ erro: 'Erro ao registrar a venda.', detalhes: error.message });
+    }
+};
+
+const listarVendasController = async (req, res) => {
+    try {
+        const vendas = await model.listarVendas();
+        res.status(200).json(vendas);
+    } catch (error) {
+        console.error('Erro ao listar as vendas:', error.message);
+        res.status(500).json({ erro: 'Erro ao listar as vendas.', detalhes: error.message });
     }
 };
 
 module.exports = {
-    listarVendas,
-    registrarVenda
+    registrarVendaController,
+    listarVendasController
 };

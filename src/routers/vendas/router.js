@@ -1,13 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../../controllers/vendas/controller');
-const middleware = require('../../middleware/vendas/middleware');
 
-// GET
-router.get('/viewer', controller.listarVendas);
+// Rota para registrar uma nova venda
+router.get('/sales', controller.listarVendasController);
 
-// POST
-router.post('/create', middleware.validarDadosVenda, controller.registrarVenda);
-router.post('/buy', middleware.validarDadosVenda, controller.registrarVenda);
+// Rota para listar todas as vendas
+router.post('/buy', controller.registrarVendaController);
 
 module.exports = router;
