@@ -6,7 +6,7 @@ const HOSTNAME_KEYCLOAK = 'http://localhost:8080'; // Ajuste conforme necessári
 const REALM = 'prod'; // Substitua pelo nome do seu realm
 
 // Função para obter o token de acesso
-const getAccessToken = async () => {
+const login = async () => {
     const tokenResponse = await axios.post(`${HOSTNAME_API}/keycloak/login`);
     return tokenResponse.data.access_token;
 };
@@ -85,7 +85,7 @@ const updateUser = async (accessToken, userId, updateData) => {
 };
 
 module.exports = { 
-    getAccessToken, 
+    login, 
     createUser,
     deleteUser,
     updateUser,

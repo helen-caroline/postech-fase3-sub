@@ -12,7 +12,7 @@ const registrarVendaController = async (req, res) => {
         }
 
         // Obter o token de acesso
-        const accessToken = await model_usuarios.getAccessToken();
+        const accessToken = await model_usuarios.login();
 
         // Buscar o usuário pelo username no Keycloak
         const usuarios = await model_usuarios.getUserByUsername(accessToken, username);

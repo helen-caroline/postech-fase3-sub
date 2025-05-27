@@ -3,7 +3,7 @@ const model = require('../../models/usuarios/model');
 const getAllUsersController = async (req, res) => {
     try {
         // Obter o token de acesso
-        const accessToken = await model.getAccessToken();
+        const accessToken = await model.login();
 
         // Buscar todos os usuários no Keycloak
         const users = await model.getAllUsers(accessToken);
@@ -19,7 +19,7 @@ const getAllUsersController = async (req, res) => {
 const getUserBYController = async (req, res) => {
     try {
         // Obter o token de acesso
-        const accessToken = await model.getAccessToken();
+        const accessToken = await model.login();
 
         // Obter o username da rota (parâmetro de URL)
         const { username } = req.params;
@@ -42,8 +42,7 @@ const getUserBYController = async (req, res) => {
 const createUserController = async (req, res) => {
     try {
         // Obter o token de acesso
-        const accessToken = await model.getAccessToken();
-        console.log("Token obtido:", accessToken);
+        const accessToken = await model.login();
 
         // Dados do usuário a serem criados (vindo do corpo da requisição)
         const userData = req.body;
@@ -63,8 +62,7 @@ const createUserController = async (req, res) => {
 const deleteUserController = async (req, res) => {
     try {
         // Obter o token de acesso
-        const accessToken = await model.getAccessToken();
-        console.log("Token obtido:", accessToken);
+        const accessToken = await model.login();
 
         // Obter o ID do usuário a ser deletado do corpo da requisição
         const { userId } = req.body;
@@ -88,8 +86,7 @@ const deleteUserController = async (req, res) => {
 const updateUserController = async (req, res) => {
     try {
         // Obter o token de acesso
-        const accessToken = await model.getAccessToken();
-        console.log("Token obtido:", accessToken);
+        const accessToken = await model.login();
 
         // Obter o ID do usuário e os dados a serem atualizados do corpo da requisição
         const { userId, username, ...updateData } = req.body;
