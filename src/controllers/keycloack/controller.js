@@ -27,7 +27,63 @@ async function loginWithPassword(req, res) {
     }
 }
 
+async function introspectToken(req, res) {
+    try {
+        const { username } = req.params;
+
+        // Recuperar o token do cabeçalho Authorization
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(400).json({ error: 'Token de autorização não fornecido ou inválido' });
+        }
+
+        const access_token = authHeader.split(' ')[1]; // Extrai o token após "Bearer"
+
+        // Realizar a introspecção do token
+        const introspectionResult = await model.introspectToken(access_token);
+
+        res.status(200).json({ username, introspection: introspectionResult });
+    } catch (error) {
+        console.error('Erro ao introspectar o token:', error.response?.data || error.message);
+        res.status(500).json({ error: 'Erro ao introspectar o token' });
+    }
+}
+
+async function logoutUser(req, res) {
+    try {
+        const { username } = req.params;
+
+        // Recuperar o token do cabeçalho Authorization
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(400).json({ error: 'Token de autorização não fornecido ou inválido' });
+        }
+
+        const refresh_token = authHeader.split(' ')[1]; // Extrai o token após "Bearer"
+
+        // Realizar a introspecção do token
+        const introspectionResult = await model.introspectToken(refresh_token);
+
+        if (!introspectionResult.active) {
+            return res.status(400).json({ error: 'Usuário não está conectado' });
+        }
+
+        // Realizar o logout do usuário
+        const logoutResult = await model.logoutUser(refresh_token);
+
+        res.status(200).json({ username, message: 'Logout realizado com sucesso', result: logoutResult });
+
+    } catch (error) {
+        console.error('Erro ao fazer logout:', error.response?.data || error.message);
+        res.status(500).json({ error: 'Erro ao fazer logout' });
+    }
+}
+
 module.exports = { 
     loginClientCredentials, 
-    loginWithPassword 
+    loginWithPassword,
+    introspectToken,
+    logoutUser
 };

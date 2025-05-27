@@ -22,5 +22,7 @@ router.use(keycloak.middleware());
 // Rotas
 router.post('/login', controller.loginClientCredentials);
 router.post('/login/:username', controller.loginWithPassword);
+router.post('/introspect/:username', controller.introspectToken);
+router.post('/logout/:username', controller.logoutUser);
 
 module.exports = { router, keycloak };
