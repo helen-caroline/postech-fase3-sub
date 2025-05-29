@@ -1,9 +1,8 @@
 const axios = require('axios');
 
-// Defina o HOSTNAME_API e HOSTNAME_KEYCLOAK com os valores corretos
-const HOSTNAME_API = 'http://localhost:3000';
-const HOSTNAME_KEYCLOAK = 'http://localhost:8080'; // Ajuste conforme necessário
-const REALM = 'prod'; // Substitua pelo nome do seu realm
+const HOSTNAME_API = process.env.HOSTNAME_API
+const HOSTNAME_KEYCLOAK = process.env.HOSTNAME 
+const REALM = process.env.REALM;
 
 // Função para obter o token de acesso
 const login = async () => {

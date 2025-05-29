@@ -1,10 +1,11 @@
 const axios = require('axios');
 const qs = require('qs');
+require('dotenv').config();
 
-const HOSTNAME = 'http://localhost:8080'; // Substitua pelo seu hostname
-const REALM = 'prod'; // Substitua pelo seu realm
-const CLIENT_ID = 'api-veiculos'; // Substitua pelo seu client_id
-const CLIENT_SECRET = '9URsAGle3YxjvZPxbGHGr562sdG8Dult'; // Substitua pelo seu client_secret
+const HOSTNAME = process.env.HOSTNAME;
+const REALM = process.env.REALM;
+const CLIENT_ID = process.env.CLIENT_ID
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
 
 async function getClientCredentialsToken() {
     const data = qs.stringify({
