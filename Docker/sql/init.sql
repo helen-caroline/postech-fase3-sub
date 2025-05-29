@@ -10,6 +10,14 @@ CREATE TABLE tb_veiculos (
     vendido BOOLEAN
 );
 
+CREATE TABLE tb_vendas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    veiculo_id INT NOT NULL,
+    usuario_id VARCHAR(255) NOT NULL,
+    data DATETIME NOT NULL,
+    FOREIGN KEY (veiculo_id) REFERENCES tb_veiculos(id)
+);
+
 INSERT INTO tb_veiculos (id, marca, modelo, ano, cor, preco, vendido) VALUES
 (1, 'Toyota', 'Corolla', 2020, 'Prata', 75000, false),
 (2, 'Honda', 'Civic', 2019, 'Preto', 85000, false),

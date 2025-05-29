@@ -31,7 +31,7 @@ const validarDadosVeiculo = (req, res, next) => {
 };
 
 // Middleware para verificar se o veículo existe
-const verificarVeiculoExistente = (req, res, next) => {
+const verificarVeiculoExistente = async (req, res, next) => {
     const { id } = req.params;
 
     // Verificar se o ID é válido
@@ -39,13 +39,19 @@ const verificarVeiculoExistente = (req, res, next) => {
         return res.status(400).json({ erro: 'ID do veículo inválido.' });
     }
 
-    const veiculo = model.listarVeiculos().find(v => v.id === parseInt(id));
-    if (!veiculo) {
-        return res.status(404).json({ erro: 'Veículo não encontrado.' });
-    }
+    try {
+        const veiculos = await model.listarVeiculos();
+        const veiculo = veiculos.find(v => v.id === parseInt(id));
 
-    req.veiculo = veiculo; // Adiciona o veículo encontrado ao objeto da requisição
-    next(); // Continua para o próximo middleware ou controlador
+        if (!veiculo) {
+            return res.status(404).json({ erro: 'Veículo não encontrado.' });
+        }
+
+        req.veiculo = veiculo; // Adiciona o veículo encontrado ao objeto da requisição
+        next(); // Continua para o próximo middleware ou controlador
+    } catch (error) {
+        res.status(500).json({ erro: 'Erro ao verificar veículo.', detalhes: error.message });
+    }
 };
 
 module.exports = {

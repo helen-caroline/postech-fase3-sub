@@ -1,82 +1,51 @@
-// Simulação de banco de dados
-let veiculos = [
-    {
-        id: 1,
-        marca: "Toyota",
-        modelo: "Corolla",
-        ano: 2020,
-        cor: "Prata",
-        preco: 75000,
-        vendido: false
-    },
-    {
-        id: 2,
-        marca: "Honda",
-        modelo: "Civic",
-        ano: 2019,
-        cor: "Preto",
-        preco: 85000,
-        vendido: false
-    },
-    {
-        id: 3,
-        marca: "Fiat",
-        modelo: "Uno",
-        ano: 2015,
-        cor: "Branco",
-        preco: 25000,
-        vendido: true
-    },
-    {
-        id: 4,
-        marca: "Ford",
-        modelo: "Ka",
-        ano: 2018,
-        cor: "Vermelho",
-        preco: 30000,
-        vendido: false
-    }
-];
+const mysql = require('mysql2/promise');
+require('dotenv').config();
+
+// Configuração da conexão com o banco de dados
+const pool = mysql.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+});
 
 // GET
-const listarVeiculos = () => {
-    return veiculos;
+const listarVeiculos = async () => {
+    const [rows] = await pool.query('SELECT * FROM tb_veiculos');
+    return rows;
 };
 
-const listarVeiculosDisponiveis = () => {
-    return veiculos
-        .filter(veiculo => !veiculo.vendido) // Filtra veículos não vendidos
-        .sort((a, b) => a.preco - b.preco); // Ordena por preço (crescente)
+const listarVeiculosDisponiveis = async () => {
+    const [rows] = await pool.query('SELECT * FROM tb_veiculos WHERE vendido = false ORDER BY preco ASC');
+    return rows;
 };
 
-const listarVeiculosVendidos = () => {
-    return veiculos
-        .filter(veiculo => veiculo.vendido) // Filtra veículos vendidos
-        .sort((a, b) => a.preco - b.preco); // Ordena por preço (crescente)
+const listarVeiculosVendidos = async () => {
+    const [rows] = await pool.query('SELECT * FROM tb_veiculos WHERE vendido = true ORDER BY preco ASC');
+    return rows;
 };
 
 // POST
-const adicionarVeiculo = (veiculo) => {
-    const novoVeiculo = {
-        id: veiculos.length + 1,
-        vendido: false, // Adiciona o campo "vendido"
-        ...veiculo
-    };
-    veiculos.push(novoVeiculo);
-    return novoVeiculo;
+const adicionarVeiculo = async (veiculo) => {
+    const { marca, modelo, ano, cor, preco } = veiculo;
+    const [result] = await pool.query(
+        'INSERT INTO tb_veiculos (marca, modelo, ano, cor, preco, vendido) VALUES (?, ?, ?, ?, ?, ?)',
+        [marca, modelo, ano, cor, preco, false]
+    );
+    return { id: result.insertId, ...veiculo, vendido: false };
 };
 
 // PUT
-const editarVeiculo = (id, dadosAtualizados) => {
-    const index = veiculos.findIndex(veiculo => veiculo.id === parseInt(id)); // Certifique-se de usar parseInt
-    if (index === -1) {
+const editarVeiculo = async (id, dadosAtualizados) => {
+    const [result] = await pool.query('UPDATE tb_veiculos SET ? WHERE id = ?', [dadosAtualizados, id]);
+    if (result.affectedRows === 0) {
         return null;
     }
-    veiculos[index] = { ...veiculos[index], ...dadosAtualizados };
-    return veiculos[index];
+    const [updatedVeiculo] = await pool.query('SELECT * FROM tb_veiculos WHERE id = ?', [id]);
+    return updatedVeiculo[0];
 };
 
-module.exports = { 
+module.exports = {
     listarVeiculos,
     adicionarVeiculo,
     editarVeiculo,
