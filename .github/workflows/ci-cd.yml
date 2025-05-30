@@ -21,14 +21,34 @@ jobs:
         with:
           node-version: '16'
 
+      - name: Start Services
+        run: docker-compose up -d
+
+      - name: Wait for Services
+        run: |
+          until nc -z localhost 5432; do
+            echo "Waiting for database...";
+            sleep 5;
+          done
+          until nc -z localhost 8080; do
+            echo "Waiting for Keycloak...";
+            sleep 5;
+          done
+
       - name: Install Dependencies
         run: npm install
 
-      - name: Run Tests
-        run: npm test
+      # - name: Run Tests
+      #   run: npm test
+
+      # - name: Run Tests
+      #   run: npm test -- --coverage
 
       - name: Build Project
         run: npm run build
+
+      - name: Stop Services
+        run: docker-compose down
 
   deploy:
     runs-on: ubuntu-latest

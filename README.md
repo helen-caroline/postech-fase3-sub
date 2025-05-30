@@ -1,14 +1,13 @@
+##
 
+## keycloak
 
-### keycloak
-
-ao acessar o dashboard de primeira vez utilize a senha admin para o usuario admin depois importe os arquivos na pasta
-keycloak na raiz do projeto.
-keycloak\import
+Ao acessar o dashboard de primeira vez utilize a senha admin para o usuario admin depois importe os arquivos na pasta keycloak na raiz do projeto.
+- keycloak\import
     realm: keycloak\import\realm-export.json
-    client: keycloak\import
+    client: keycloak\import\api-veiculos.json
 
-para importar o realm voce precisar seguir o seguintes passos:
+Para importar o realm voce precisar seguir o seguintes passos:
 1. Manage realms
 2. Create realm
 3. Browser > selecione o arquivo: realm-export.json
@@ -19,10 +18,8 @@ Configure o Realm:
 2. em `Email settings` certifique-se que as opções estão habilitadas:
     Email as username = On
     Login with email = On
-3. em `User info settings` certifique-se que as opções estão habilitadas:
-    Edit username  = On
 
-para importar o client voce precisar seguir o seguintes passos:
+Para importar o client voce precisar seguir o seguintes passos:
 1. Clients
 2. ao lado de create client clique em import client
 3. Browser > selecione o arquivo: api-veiculos.json
@@ -57,5 +54,5 @@ propriedades [propriedades marcadas com * são obrigatorias]:
             - relm-management: manage-users
             - relm-management: create-client
 
-6. Após os passo acima as rotas da API estão habilitadas para o uso.
+6. Após os passo acima as rotas da API estão habilitadas para o uso em conexão com o keycloak
     
