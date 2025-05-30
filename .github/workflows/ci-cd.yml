@@ -21,9 +21,6 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Start Services
-        run: docker-compose up -d
-
       - name: Wait for Services
         run: |
           until nc -z localhost 3306; do
