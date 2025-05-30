@@ -1,5 +1,4 @@
 ## Configurando o Runner com o github
-# Configuração do Runner no GitHub
 
 Para o funcionamento do deploy, é necessário configurar o runner no GitHub. O runner deve estar no mesmo servidor da aplicação.
 
