@@ -5,6 +5,7 @@
     "main": "server.js",
     "type": "commonjs",
     "scripts": {
+        "build": "echo 'Nenhuma etapa de build necessária para este projeto'",
         "test": "jest",
         "start": "node src/server.js",
         "dev": "nodemon src/server.js"

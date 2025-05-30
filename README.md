@@ -1,4 +1,44 @@
-##
+## Runner
+
+É necessario a configuração do runner no github para o funcionamento do deploy
+o runner deve ficar configurado no mesmo servidor da aplicação.
+
+comandos necessarios para permitir a instalação e configuração do runner:
+``
+apt-get install update -y
+apt upgrade -y
+apt-get install -y curl vim perl
+``
+- comandos github para instalação do runner
+``
+mkdir actions-runner && cd actions-runner &&
+curl -o actions-runner-linux-x64-2.324.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.324.0/actions-runner-linux-x64-2.324.0.tar.gz
+echo "TOKEN  actions-runner-linux-x64-2.324.0.tar.gz" | shasum -a 256 -c
+tar xzf ./app/actions-runner-linux-x64-2.324.0.tar.gz
+``
+- adicionando um usuario para conseguir rodar as configurações sem modo administrador no container pré iniciado pelo docker compose
+``
+useradd -m github-runner
+chown -R github-runner:github-runner /app/actions-runner
+``
+- instalação de dependencias do config.sh
+``
+./bin/installdependencies.sh
+``
+
+``
+su - github-runner -c 'cd /app/actions-runner && ./config.sh --url https://github.com/USER/postech-fase3-sub --token OUTRO_TOKEN'
+
+America: ``2``
+Sao_paulo: ``136``
+``
+``
+su - github-runner -c 'cd /app/actions-runner && ./run.sh'
+``
+Se tudo der certo voce recebera algo como:
+√ Connected to GitHub
+Current runner version: '2.324.0'
+2025-05-30 20:20:38Z: Listening for Jobs
 
 ## keycloak
 
@@ -55,4 +95,7 @@ propriedades [propriedades marcadas com * são obrigatorias]:
             - relm-management: create-client
 
 6. Após os passo acima as rotas da API estão habilitadas para o uso em conexão com o keycloak
-    
+
+
+# API
+
