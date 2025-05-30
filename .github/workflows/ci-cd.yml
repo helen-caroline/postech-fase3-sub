@@ -21,17 +21,6 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Wait for Services
-        run: |
-          until nc -z localhost 3306; do
-            echo "Waiting for database...";
-            sleep 5;
-          done
-          until nc -z localhost 8080; do
-            echo "Waiting for Keycloak...";
-            sleep 5;
-          done
-
       - name: Install Dependencies
         run: npm install
 
