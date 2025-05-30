@@ -1,4 +1,5 @@
 const axios = require('axios');
+require('dotenv').config();
 
 const HOSTNAME_API = process.env.HOSTNAME_API
 const HOSTNAME_KEYCLOAK = process.env.HOSTNAME 

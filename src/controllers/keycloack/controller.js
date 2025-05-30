@@ -8,6 +8,9 @@ async function loginClientCredentials(req, res) {
     } catch (error) {
         console.error('Erro ao obter o token:', error.response?.data || error.message);
         res.status(500).json({ error: 'Erro ao obter o token de acesso' });
+        console.error('Erro na requisição:', error.response?.data || error.message);
+        console.error('Detalhes do erro:', error);
+        throw error;
     }
 }
 
@@ -24,6 +27,9 @@ async function loginWithPassword(req, res) {
     } catch (error) {
         console.error('Erro ao obter os tokens:', error.response?.data || error.message);
         res.status(500).json({ error: 'Erro ao obter os tokens de acesso' });
+        console.error('Erro na requisição:', error.response?.data || error.message);
+        console.error('Detalhes do erro:', error);
+        throw error;
     }
 }
 

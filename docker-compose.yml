@@ -2,8 +2,9 @@ version: '3.9'
 
 services:
   keycloak:
+    container_name: keycloak
     build:
-      context: .
+      context: ./keycloak
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
@@ -30,6 +31,20 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
       - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  backend:
+    build: 
+      context: .
+      dockerfile: src/Dockerfile
+    container_name: backend
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    env_file:
+      - .env
+    depends_on:
+    - keycloak
 
 networks:
   app-network:

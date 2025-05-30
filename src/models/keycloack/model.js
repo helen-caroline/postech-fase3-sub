@@ -4,8 +4,16 @@ require('dotenv').config();
 
 const HOSTNAME = process.env.HOSTNAME;
 const REALM = process.env.REALM;
-const CLIENT_ID = process.env.CLIENT_ID
+const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
+
+console.log('HOSTNAME:', HOSTNAME);
+console.log('REALM:', REALM);
+console.log('CLIENT_ID:', CLIENT_ID);
+console.log('CLIENT_SECRET:', CLIENT_SECRET);
+
+const url = `${HOSTNAME}/realms/${REALM}/protocol/openid-connect/token`;
+console.log('URL gerada:', url);
 
 async function getClientCredentialsToken() {
     const data = qs.stringify({
