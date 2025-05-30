@@ -1,140 +1,124 @@
 ## Configurando o Runner com o github
+# Configuração do Runner no GitHub
 
-É necessario a configuração do runner no github para o funcionamento do deploy
-o runner deve ficar configurado no mesmo servidor da aplicação.
+Para o funcionamento do deploy, é necessário configurar o runner no GitHub. O runner deve estar no mesmo servidor da aplicação.
 
-comandos necessarios para permitir a instalação e configuração do runner:
-``
-apt-get install update -y
+### Comandos para instalação e configuração do runner:
+```bash
+apt-get update -y
 apt upgrade -y
 apt-get install -y curl vim perl docker-compose
-``
-- comandos github para instalação do runner
-``
-mkdir actions-runner && cd actions-runner &&
+```
+
+### Instalação do runner no GitHub:
+```bash
+mkdir actions-runner && cd actions-runner
 curl -o actions-runner-linux-x64-2.324.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.324.0/actions-runner-linux-x64-2.324.0.tar.gz
 echo "TOKEN  actions-runner-linux-x64-2.324.0.tar.gz" | shasum -a 256 -c
 tar xzf ./actions-runner-linux-x64-2.324.0.tar.gz
-``
-- adicionando um usuario para conseguir rodar as configurações sem modo administrador no container pré iniciado pelo docker compose
-``
+```
+
+### Configuração de usuário para rodar o runner:
+```bash
 useradd -m github-runner
 chown -R github-runner:github-runner /actions-runner
-``
-- instalação de dependencias do config.sh
-``
+```
+
+### Instalação de dependências:
+```bash
 ./bin/installdependencies.sh
-``
+```
 
-``
+### Configuração do runner:
+```bash
 su - github-runner -c 'cd /actions-runner && ./config.sh --url https://github.com/USER/postech-fase3-sub --token OUTRO_TOKEN'
+```
 
-America: ``2``
-Sao_paulo: ``136``
-``
-``
+### Iniciar o runner:
+```bash
 su - github-runner -c 'cd /actions-runner && ./run.sh'
-``
-Se tudo der certo voce recebera algo como:
+```
+
+Se tudo estiver correto, você verá:
+```
 √ Connected to GitHub
 Current runner version: '2.324.0'
 2025-05-30 20:20:38Z: Listening for Jobs
+```
 
-## Configurando a base de dados do mysql
-1. entre no servidor mysql
-``docker exec -it mysql bash``
-2. acesse o banco de dados
-```mysql -uroot -p``
-3. insira a senha: admin
-voce vera algo como isso:
+---
 
-bash-5.1# mysql -uroot -p
-Enter password:
-Welcome to the MySQL monitor.  Commands end with ; or \g.
-Your MySQL connection id is 13
-Server version: 8.0.42 MySQL Community Server - GPL
+# Configuração do Banco de Dados MySQL
 
-Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+### Passos:
+1. Entre no servidor MySQL:
+    ```bash
+    docker exec -it mysql bash
+    ```
+2. Acesse o banco de dados:
+    ```bash
+    mysql -uroot -p
+    ```
+    Insira a senha: `admin`.
 
-Oracle is a registered trademark of Oracle Corporation and/or its
-affiliates. Other names may be trademarks of their respective
-owners.
+3. Execute os comandos do arquivo `sql/init.sql` bloco por bloco.
 
-Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+4. Após finalizar, o banco de dados estará pronto para os testes.
 
-mysql>
+---
 
-4. execute os comandos dentro do arquivo init.sql bloco por bloco
-sql\init.sql
+# Configuração do Keycloak
 
-5. Ao finalizar a base de dados ja estará pronta para os testes.
+### Importação de arquivos:
+- **Realm**: `keycloak/import/realm-export.json`
+- **Client**: `keycloak/import/api-veiculos.json`
 
+#### Importar Realm:
+1. Acesse **Manage realms**.
+2. Clique em **Create realm**.
+3. Selecione o arquivo `realm-export.json`.
+4. Clique em **Create**.
 
-## keycloak
+#### Configurar Realm:
+1. Em **Realm Settings**, na aba superior, clique em **Login**.
+2. Certifique-se que as opções estão habilitadas:
+    - Email as username: **On**
+    - Login with email: **On**
 
-Ao acessar o dashboard de primeira vez utilize a senha admin para o usuario admin depois importe os arquivos na pasta keycloak na raiz do projeto.
-- keycloak\import
-    realm: keycloak\import\realm-export.json
-    client: keycloak\import\api-veiculos.json
+#### Importar Client:
+1. Acesse **Clients**.
+2. Clique em **Import client**.
+3. Selecione o arquivo `api-veiculos.json`.
+4. Clique em **Save**.
 
-Para importar o realm voce precisar seguir o seguintes passos:
-1. Manage realms
-2. Create realm
-3. Browser > selecione o arquivo: realm-export.json
-5. clique em Create no botão inferior.
+#### Criar Usuário:
+1. Acesse **Users** e clique em **Create new user**.
+2. Preencha as propriedades:
+    - **Username**: `valid_user`
+    - **Email**: `valid_user@email.com`
+    - **First Name**: `Valid`
+    - **Last Name**: `User`
+3. Clique em **Create**.
+4. Defina a senha:
+    - **Password**: `admin321`
+    - Desabilite **Temporary**.
 
-Configure o Realm:
-1. em `Realm Settings` na aba superior clique em `Login`
-2. em `Email settings` certifique-se que as opções estão habilitadas:
-    Email as username = On
-    Login with email = On
+#### Configurar Roles:
+1. Acesse o client `api-veiculos`.
+2. Vá para **Service accounts roles**.
+3. Clique em **Assign roles** e selecione:
+    - **realm-management: manage-realm**
+    - **realm-management: manage-users**
+    - **realm-management: create-client**
 
-Para importar o client voce precisar seguir o seguintes passos:
-1. Clients
-2. ao lado de create client clique em import client
-3. Browser > selecione o arquivo: api-veiculos.json
-4. clique em Save no botão inferior.
-
-OBS: em credentials voce pode encontrar o client secret onde vai usar o valor para configurar seu .env
-
-Para iniciar com os testes vamos criar o usuario valid_ser, siga os passos abaixo dentro do Keycloak
-1. Users
-2. Create new user
-propriedades [propriedades marcadas com * são obrigatorias]: 
-    A. Email verified: Habilitado
-    B. * Username: valid_user
-    C. email: valid_user@email.com
-    D. First Name: Valid
-    E. Last Name: User
-
-3. clique em Create no botao inferior
-4. após criar o usuario vá para `credentials` e clique em `Set Password` defina a senha do usuario
-    A. Set password for valid_user
-    password: `admin321`
-    confirme a senha.
-    B. desabilite o Temporary: para senha temporaria.
-
-5. !Importante! ao consluir as etapas acima voce precisa definir as roles do seu Client : api-veiculos
-    A. va para clientes e clique no cliente criado: api-veiculos
-    B. selecione na aba superior o Service accounts roles
-    C. clique em Assign roles e defina a quantidade de itens por paginas para 100
-    D. marque a caixa de seleção para todos os tipos de roles e clique em Assign: personalize conforme o necessario.
-        Roles obrigarias:
-            - relm-management: manage-realm
-            - relm-management: manage-users
-            - relm-management: create-client
-
-6. Após os passo acima as rotas da API estão habilitadas para o uso em conexão com o keycloak
-
+---
 
 # API de Gestão de Veículos
 
 ## Descrição do Projeto
-
-Este projeto é uma API desenvolvida para gerenciar veículos, usuários e vendas. Ele utiliza Keycloak para autenticação e autorização, além de um banco de dados MySQL para armazenar as informações. A API permite realizar operações como listar veículos, registrar vendas, gerenciar usuários e autenticar via Keycloak.
+API para gerenciar veículos, usuários e vendas. Utiliza Keycloak para autenticação e MySQL para armazenamento.
 
 ## Tecnologias Utilizadas
-
 - Node.js
 - Express
 - MySQL
@@ -143,19 +127,19 @@ Este projeto é uma API desenvolvida para gerenciar veículos, usuários e venda
 - Jest para testes
 
 ## Estrutura do Projeto
-
-- **src/**: Contém o código-fonte da aplicação.
-  - **models/**: Modelos para interação com o banco de dados.
+- **src/**: Código-fonte.
+  - **models/**: Modelos de banco de dados.
   - **routers/**: Rotas da API.
-  - **middleware/**: Middlewares para validação e autenticação.
-  - **controllers/**: Controladores para lógica de negócios.
-- **keycloak/**: Arquivos de configuração e importação para o Keycloak.
-- **sql/**: Scripts de inicialização do banco de dados.
-- **.env**: Configurações de ambiente.
-- **Dockerfile**: Arquivo para criação de imagem Docker.
-- **docker-compose.yml**: Arquivo para orquestração de contêineres.
+  - **middleware/**: Validação e autenticação.
+  - **controllers/**: Lógica de negócios.
+- **keycloak/**: Configurações do Keycloak.
+- **sql/**: Scripts de inicialização.
+- **.env**: Variáveis de ambiente.
+- **Dockerfile**: Criação de imagem Docker.
+- **docker-compose.yml**: Orquestração de contêineres.
 
-Configure o arquivo .env com as variáveis de ambiente necessárias:
+### Configuração do `.env`:
+```env
 DB_HOST=mysql
 DB_PORT=3306
 DB_USER=admin
@@ -167,50 +151,43 @@ HOSTNAME=http://keycloak:8080
 REALM=prod
 CLIENT_ID=api-veiculos
 CLIENT_SECRET=<CLIENT_SECRET>
+```
 
-Inicie o contêiner com Docker Compose:
-``docker-compose -f docker-compose.runner.yml up -d``
+### Iniciar contêiner:
+```bash
+docker-compose -f docker-compose.runner.yml up -d
+```
 
-Acesse a API em http://localhost:3000.
+### Endpoints Disponíveis:
+- `GET /`: Mensagem de boas-vindas.
+- `GET /health`: Status da API.
+- `POST /keycloak/login`: Autenticação via Keycloak.
+- `GET /veiculos`: Listar veículos.
+- `POST /vendas`: Registrar venda.
 
-Endpoints Disponíveis
-GET /: Mensagem de boas-vindas.
-GET /health: Verifica o status da API.
-POST /keycloak/login: Autenticação via Keycloak.
-GET /veiculos: Listar veículos.
-POST /vendas: Registrar uma venda.
+---
 
-Como Testar
+# Testes
 
-Instale as dependências:
+### Instalar dependências:
+```bash
 npm install
+```
 
-Execute os testes:
+### Executar testes:
+```bash
 npm test
+```
 
-Os testes utilizam Jest e Supertest para validar os endpoints da API.
+---
 
+# Deploy Automatizado
 
-Deploy Automatizado
-O deploy automatizado é configurado no arquivo .github/workflows/ci-cd.yml. Ele realiza as seguintes etapas:
+O deploy automatizado está configurado no arquivo `.github/workflows/ci-cd.yml`. Ele realiza:
+1. Instalação de dependências.
+2. Execução de testes.
+3. Build e push da imagem Docker.
+4. Deploy em ambiente configurado.
 
-Instalação de dependências.
-Execução de testes.
-Build e push da imagem Docker para um registro.
-Deploy em ambiente configurado.
-Para habilitar o deploy, configure as credenciais do Docker no GitHub Actions e ajuste o arquivo ci-cd.yml conforme necessário.
-
-Caso precise de mais detalhes ou ajustes, posso ajudar com os arquivos específicos.# API de Gestão de Veículos
-
-Descrição do Projeto
-Este projeto é uma API desenvolvida para gerenciar veículos, usuários e vendas. Ele utiliza Keycloak para autenticação e autorização, além de um banco de dados MySQL para armazenar as informações. A API permite realizar operações como listar veículos, registrar vendas, gerenciar usuários e autenticar via Keycloak.
-
-Tecnologias Utilizadas
-    Node.js
-    Express
-    MySQL
-    Keycloak
-    Docker e Docker Compose
-    Jest para testes
-
-
+Configure as credenciais do Docker no GitHub Actions e ajuste o arquivo conforme necessário.
+---
