@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.3'
 
 services:
   keycloak:
@@ -30,13 +30,12 @@ services:
       - app-network
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   backend:
     build: 
       context: .
       dockerfile: src/Dockerfile
-    container_name: backend-runner
+    container_name: backend
     ports:
       - "3000:3000"
     networks:

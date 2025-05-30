@@ -56,7 +56,7 @@ jobs:
         run: docker-compose down
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build
     if: github.ref == 'refs/heads/main'
 
@@ -66,4 +66,5 @@ jobs:
 
       - name: Deploy Application
         run: |
-          docker-compose up -d --build backend
+          docker-compose -f /workspace/docker-compose.yml up -d --build backend
+          docker-compose logs -f backend

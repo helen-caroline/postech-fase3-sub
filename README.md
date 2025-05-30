@@ -7,7 +7,7 @@ comandos necessarios para permitir a instalação e configuração do runner:
 ``
 apt-get install update -y
 apt upgrade -y
-apt-get install -y curl vim perl
+apt-get install -y curl vim perl docker-compose
 ``
 - comandos github para instalação do runner
 ``
