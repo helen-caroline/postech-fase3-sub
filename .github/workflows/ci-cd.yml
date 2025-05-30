@@ -33,8 +33,6 @@ jobs:
       - name: Build Project
         run: npm run build
 
-      - name: Stop Services
-        run: docker-compose down
 
   deploy:
     runs-on: self-hosted
