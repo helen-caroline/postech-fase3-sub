@@ -9,10 +9,10 @@ router.get('/available', controller.listarVeiculosDisponiveis);
 router.get('/sold', controller.listarVeiculosVendidos);
 
 // POST
-router.post('/create', middleware.validarDadosVeiculo, controller.cadastrarVeiculo);
+router.post('/create', controller.cadastrarVeiculo);
 
 
 // PUT
-router.put('/update/:id', middleware.verificarVeiculoExistente, middleware.validarDadosVeiculo, controller.editarVeiculo);
+router.put('/update/:id', controller.editarVeiculo);
 
 module.exports = router;

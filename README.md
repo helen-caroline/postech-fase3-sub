@@ -30,7 +30,7 @@ chown -R github-runner:github-runner /actions-runner
 
 ### Configuração do runner:
 ```bash
-su - github-runner -c 'cd /actions-runner && ./config.sh --url https://github.com/USER/postech-fase3-sub --token OUTRO_TOKEN'
+su - github-runner -c 'cd /actions-runner && ./config.sh --url https://github.com/helen-caroline/postech-fase3-sub --token A56FW6WEBDLEGQM34WV6PNLIHJGK4'
 ```
 
 ### Iniciar o runner:
