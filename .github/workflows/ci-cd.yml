@@ -50,4 +50,5 @@ jobs:
 
       - name: Deploy Application
         run: |
-          docker-compose up -d --force-recreate backend
+          docker-compose down --remove-orphans backend
+          docker-compose up -d
