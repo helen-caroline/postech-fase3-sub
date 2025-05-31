@@ -50,5 +50,6 @@ jobs:
 
       - name: Deploy Application
         run: |
-          docker-compose down --remove-orphans backend
-          docker-compose up -d
+          cd /workspace
+          docker-compose -f /workspace/docker-compose.yml stop backend
+          docker-compose -f /workspace/docker-compose.yml up -d

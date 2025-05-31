@@ -6,7 +6,7 @@ Para o funcionamento do deploy, é necessário configurar o runner no GitHub. O 
 ```bash
 apt-get update -y
 apt upgrade -y
-apt-get install -y curl vim perl docker-compose
+apt install -y curl vim perl docker-compose
 ```
 
 ### Instalação do runner no GitHub:
