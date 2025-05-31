@@ -3,7 +3,7 @@ USE veiculos;
 
 -- // bloco: 2
 CREATE TABLE tb_veiculos (
-    id INT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     marca VARCHAR(50),
     modelo VARCHAR(50),
     ano INT,
