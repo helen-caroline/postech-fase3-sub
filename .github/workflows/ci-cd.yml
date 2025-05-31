@@ -48,10 +48,6 @@ jobs:
           sudo chmod 666 /var/run/docker.sock || true
           sudo usermod -aG docker $(whoami) || true
 
-      - name: Recreate Docker Network
-        run: |
-          docker network rm postech-fase3-sub_app-network || true
-          docker network create --driver bridge postech-fase3-sub_app-network
       - name: Deploy Application
         run: |
-          docker-compose up --no-deps --build -d backend
+          docker-compose up -d --force-recreate backend
