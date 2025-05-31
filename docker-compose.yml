@@ -48,6 +48,7 @@ services:
 networks:
   app-network:
     driver: bridge
+    enable_ipv4: true
 
 volumes:
   mysql-data:
