@@ -50,5 +50,4 @@ jobs:
 
       - name: Deploy Application
         run: |
-          docker-compose -f /workspace/docker-compose.yml up -d --build backend
-          docker-compose logs -f backend
+          docker-compose up --no-deps --build -d backend
