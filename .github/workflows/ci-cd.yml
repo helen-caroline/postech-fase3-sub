@@ -50,6 +50,5 @@ jobs:
 
       - name: Deploy Application
         run: |
-          cd /workspace
-          docker-compose -f /workspace/docker-compose.yml stop backend
-          docker-compose -f /workspace/docker-compose.yml up -d
+          docker-compose -f /workspace/docker-compose.backend.yml down
+          docker-compose -f /workspace/docker-compose.backend.yml up -d

@@ -14,7 +14,7 @@ services:
     depends_on:
       - mysql
     networks:
-      - app-network
+      - app-network2
 
   mysql:
     image: mysql:8.0
@@ -27,28 +27,13 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
     networks:
-      - app-network
+      - app-network2
     volumes:
       - mysql-data:/var/lib/mysql
 
-  backend:
-    build: 
-      context: .
-      dockerfile: src/Dockerfile
-    container_name: backend
-    ports:
-      - "3000:3000"
-    networks:
-      - app-network
-    env_file:
-      - .env
-    depends_on:
-    - keycloak
-
 networks:
-  app-network:
-    driver: bridge
-    enable_ipv4: true
+  app-network2:
+    external: true
 
 volumes:
   mysql-data:

@@ -7,13 +7,20 @@ services:
     stdin_open: true
     tty: true
     networks:
-      - runner-network
+      - app-network2
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # Monta o socket Docker do host no container
       - .:/workspace # Monta o diretório do projeto no container
     environment:
       - DOCKER_HOST=unix:///var/run/docker.sock # Configura o Docker para usar o socket do host
-
+    command: >
+      bash -c "
+      apt update && apt install -y curl vim perl docker-compose &&
+      cd /workspace &&
+      docker-compose -f docker-compose.backend.yml up -d &&
+      docker-compose -f docker-compose.yml up -d &&
+      tail -f /dev/null
+      "
 networks:
-  runner-network:
-    driver: bridge
+  app-network2:
+    external: true

@@ -4,8 +4,8 @@ Para o funcionamento do deploy, é necessário configurar o runner no GitHub. O 
 
 ### Comandos para instalação e configuração do runner:
 ```bash
-apt-get update -y
-apt upgrade -y
+apt-get update -y &&
+apt upgrade -y &&
 apt install -y curl vim perl docker-compose
 ```
 
