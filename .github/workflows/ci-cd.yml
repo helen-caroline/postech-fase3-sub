@@ -51,4 +51,5 @@ jobs:
       - name: Deploy Application
         run: |
           docker-compose -f /workspace/docker-compose.backend.yml down
+          docker-compose -f docker-compose.backend.yml build --no-cache
           docker-compose -f /workspace/docker-compose.backend.yml up -d
