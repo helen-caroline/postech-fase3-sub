@@ -28,8 +28,11 @@ jobs:
       # - name: Run Tests
       #   run: npm test
 
-      # - name: Run Tests
-      #   run: npm test -- --coverage
+      - name: Build Application
+        run: |
+          docker-compose -f /workspace/docker-compose.backend.yml down
+          docker rmi workspace_backend
+          docker-compose -f docker-compose.backend.yml build --no-cache
 
   deploy:
     runs-on: self-hosted
@@ -47,7 +50,4 @@ jobs:
 
       - name: Deploy Application
         run: |
-          docker-compose -f /workspace/docker-compose.backend.yml down
-          docker rmi workspace_backend
-          docker-compose -f docker-compose.backend.yml build --no-cache
           docker-compose -f /workspace/docker-compose.backend.yml up -d

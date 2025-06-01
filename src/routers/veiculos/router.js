@@ -11,7 +11,6 @@ router.get('/sold', controller.listarVeiculosVendidos);
 // POST
 router.post('/create', middleware.validarDadosVeiculo, controller.cadastrarVeiculo);
 
-
 // PUT
 router.put('/update/:id', middleware.verificarVeiculoExistente, middleware.validarDadosVeiculo, controller.editarVeiculo);
 
