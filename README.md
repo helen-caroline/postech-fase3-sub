@@ -77,8 +77,6 @@ docker-compose -f docker-compose.runner.yml up -d
 
 Logo após o runner estiver UP os containers Mysql, Keycloak e Backend, iniciarão automaticamente.
 
-Os dados iniciais para teste no mysql já serão inseridos automaticamente no startar do container.
-
 ### Acesso ao banco de dados MySQL
 ```bash
 docker exec -it mysql bash
@@ -125,7 +123,7 @@ chown -R github-runner:github-runner /actions-runner
 ```
 ### Configuração do runner:
 ```bash
-su - github-runner -c 'cd /actions-runner && ./config.sh --url https://github.com/helen-caroline/postech-fase3-sub --token A56FW6XNUQF6EKYO2ATOX6LIHSAJ2'
+su - github-runner -c 'cd /actions-runner && ./config.sh --url https://github.com/helen-caroline/postech-fase3-sub --token A56FW6TXVYBD64VRMPSUVZLIHSTDS'
 ```
 ## Using your self-hosted runner
 ### Iniciar o runner:
