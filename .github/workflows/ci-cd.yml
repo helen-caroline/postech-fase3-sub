@@ -32,10 +32,6 @@ jobs:
       # - name: Run Tests
       #   run: npm test -- --coverage
 
-      - name: Build Project
-        run: npm run build
-
-
   deploy:
     runs-on: self-hosted
     needs: build
