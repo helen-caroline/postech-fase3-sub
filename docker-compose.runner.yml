@@ -17,8 +17,9 @@ services:
       bash -c "
       apt update && apt install -y curl vim perl docker-compose &&
       cd /workspace &&
+      docker-compose -f docker-compose.mysql.yml up -d &&
+      docker-compose -f docker-compose.keycloak.yml up -d &&
       docker-compose -f docker-compose.backend.yml up -d &&
-      docker-compose -f docker-compose.yml up -d &&
       tail -f /dev/null
       "
 networks:

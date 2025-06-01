@@ -1,15 +1,110 @@
+# API de Gestão de Veículos
+
+## Descrição do Projeto
+API para gerenciar veículos, usuários e vendas. Utiliza Keycloak para autenticação e MySQL para armazenamento.
+
+## Tecnologias Utilizadas
+- Node.js
+- Express
+- MySQL
+- Keycloak
+- Docker e Docker Compose
+- Jest para testes
+
+## Estrutura do Projeto
+- **src/**: Código-fonte.
+  - **app.js**: Configuração principal da aplicação.
+  - **server.js**: Inicialização do servidor.
+  - **models/**: Modelos de banco de dados.
+    - **veiculos/model.js**: Operações relacionadas aos veículos.
+    - **vendas/model.js**: Operações relacionadas às vendas.
+  - **routers/**: Rotas da API.
+    - **veiculos/router.js**: Rotas relacionadas aos veículos.
+    - **vendas/router.js**: Rotas relacionadas às vendas.
+    - **usuarios/router.js**: Rotas relacionadas aos usuários.
+  - **middleware/**: Validação e autenticação.
+    - **veiculos/middleware.js**: Middleware para validação de veículos.
+    - **vendas/middleware.js**: Middleware para validação de vendas.
+  - **controllers/**: Lógica de negócios.
+    - **veiculos/controller.js**: Controlador de veículos.
+    - **vendas/controller.js**: Controlador de vendas.
+    - **usuarios/controller.js**: Controlador de usuários.
+- **Docker/**: Arquivos de configuração do Docker Compose.
+  - **backend/**
+    - **Dockerfile**: Configuração do contêiner backend.
+  - **keycloak/**: Configurações do Keycloak.
+    - **Dockerfile**: Configuração do contêiner Keycloak.
+    - **import/**: Arquivos de importação para Keycloak.
+      - **api-veiculos.json**: Configuração do cliente Keycloak.
+      - **realm-export.json**: Exportação do Realm.
+- **sql/**: Scripts de inicialização do banco de dados.
+- **init.sql**: Script para criação e inicialização das tabelas.
+- **docker-compose.backend.yml**: Configuração do backend.
+- **docker-compose.keycloak.yml**: Configuração do Keycloak.
+- **docker-compose.mysql.yml**: Configuração do MySQL.
+- **docker-compose.runner.yml**: Configuração do runner.
+- **.env**: Variáveis de ambiente.
+- **README.md**: Documentação do projeto.
+
+---
+
+### Configuração do `.env`:
+```env
+DB_HOST=mysql
+DB_PORT=3306
+DB_USER=admin
+DB_PASSWORD=admin
+DB_NAME=veiculos
+
+HOSTNAME_API=http://backend:3000
+HOSTNAME=http://keycloak:8080
+REALM=prod
+CLIENT_ID=api-veiculos
+CLIENT_SECRET=<CLIENT_SECRET>
+```
+
+### Iniciar contêiner:
+para iniciar o projeto subo o container principal que será responsavel pelo deploy automatizado:
+
+Crie a rede compartilhada com o comando:
+```bash
+docker network create app-network2
+```
+
+```bash
+docker-compose -f docker-compose.runner.yml up -d
+```
+
+Logo após o runner estiver UP os containers Mysql, Keycloak e Backend, iniciarão automaticamente.
+
+Os dados iniciais para teste no mysql já serão inseridos automaticamente no startar do container.
+
+### Acesso ao banco de dados MySQL
+```bash
+docker exec -it mysql bash
+mysql -uroot -p
+Insira a senha: [`admin`]
+```
+Configurando a base dados:
+execute os comandos no arquivo ``.init`` na raiz do projeto.
+
+### Endpoints Disponíveis:
+- `GET /`: Mensagem de boas-vindas.
+- `GET /health`: Status da API.
+- `POST /keycloak/login`: Autenticação via Keycloak.
+- `GET /veiculos`: Listar veículos.
+- `POST /vendas`: Registrar venda.
+
+---
+
 # Configurando o Runner com o github
 
 Para o funcionamento do deploy, é necessário configurar o runner no GitHub. O runner deve estar no mesmo servidor da aplicação.
 
-### Comandos para instalação e configuração do runner:
-```bash
-apt-get update -y &&
-apt upgrade -y &&
-apt install -y curl vim perl docker-compose
-```
-
 ### Instalação do runner no GitHub:
+Pode seguir a parte inicial que o github orienta
+
+Download
 ```bash
 mkdir actions-runner && cd actions-runner
 curl -o actions-runner-linux-x64-2.324.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.324.0/actions-runner-linux-x64-2.324.0.tar.gz
@@ -17,22 +112,22 @@ echo "TOKEN  actions-runner-linux-x64-2.324.0.tar.gz" | shasum -a 256 -c
 tar xzf ./actions-runner-linux-x64-2.324.0.tar.gz
 ```
 
+``A paritr daqui o runner precisara de uma configuração especial:``
+## Configure
 ### Configuração de usuário para rodar o runner:
 ```bash
 useradd -m github-runner
 chown -R github-runner:github-runner /actions-runner
 ```
-
 ### Instalação de dependências:
 ```bash
 ./bin/installdependencies.sh
 ```
-
 ### Configuração do runner:
 ```bash
 su - github-runner -c 'cd /actions-runner && ./config.sh --url https://github.com/helen-caroline/postech-fase3-sub --token A56FW6XNUQF6EKYO2ATOX6LIHSAJ2'
 ```
-
+## Using your self-hosted runner
 ### Iniciar o runner:
 ```bash
 su - github-runner -c 'cd /actions-runner && ./run.sh'
@@ -44,25 +139,6 @@ Se tudo estiver correto, você verá:
 Current runner version: '2.324.0'
 2025-05-30 20:20:38Z: Listening for Jobs
 ```
-
----
-
-# Configuração do Banco de Dados MySQL
-
-### Passos:
-1. Entre no servidor MySQL:
-    ```bash
-    docker exec -it mysql bash
-    ```
-2. Acesse o banco de dados:
-    ```bash
-    mysql -uroot -p
-    ```
-    Insira a senha: `admin`.
-
-3. Execute os comandos do arquivo `sql/init.sql` bloco por bloco.
-
-4. Após finalizar, o banco de dados estará pronto para os testes.
 
 ---
 
@@ -93,7 +169,7 @@ Current runner version: '2.324.0'
 #### Criar Usuário:
 1. Acesse **Users** e clique em **Create new user**.
 2. Preencha as propriedades:
-    - **Username**: `valid_user`
+    - **Username**: `valid_user@email.com`
     - **Email**: `valid_user@email.com`
     - **First Name**: `Valid`
     - **Last Name**: `User`
@@ -112,81 +188,14 @@ Current runner version: '2.324.0'
 
 ---
 
-# API de Gestão de Veículos
-
-## Descrição do Projeto
-API para gerenciar veículos, usuários e vendas. Utiliza Keycloak para autenticação e MySQL para armazenamento.
-
-## Tecnologias Utilizadas
-- Node.js
-- Express
-- MySQL
-- Keycloak
-- Docker e Docker Compose
-- Jest para testes
-
-## Estrutura do Projeto
-- **src/**: Código-fonte.
-  - **models/**: Modelos de banco de dados.
-  - **routers/**: Rotas da API.
-  - **middleware/**: Validação e autenticação.
-  - **controllers/**: Lógica de negócios.
-- **keycloak/**: Configurações do Keycloak.
-- **sql/**: Scripts de inicialização.
-- **.env**: Variáveis de ambiente.
-- **Dockerfile**: Criação de imagem Docker.
-- **docker-compose.yml**: Orquestração de contêineres.
-
-### Configuração do `.env`:
-```env
-DB_HOST=mysql
-DB_PORT=3306
-DB_USER=admin
-DB_PASSWORD=admin
-DB_NAME=veiculos
-
-HOSTNAME_API=http://backend:3000
-HOSTNAME=http://keycloak:8080
-REALM=prod
-CLIENT_ID=api-veiculos
-CLIENT_SECRET=<CLIENT_SECRET>
-```
-
-### Iniciar contêiner:
-```bash
-docker-compose -f docker-compose.runner.yml up -d
-```
-
-### Endpoints Disponíveis:
-- `GET /`: Mensagem de boas-vindas.
-- `GET /health`: Status da API.
-- `POST /keycloak/login`: Autenticação via Keycloak.
-- `GET /veiculos`: Listar veículos.
-- `POST /vendas`: Registrar venda.
-
----
-
-# Testes
-
-### Instalar dependências:
-```bash
-npm install
-```
-
-### Executar testes:
-```bash
-npm test
-```
-
----
-
 # Deploy Automatizado
 
 O deploy automatizado está configurado no arquivo `.github/workflows/ci-cd.yml`. Ele realiza:
 1. Instalação de dependências.
 2. Execução de testes.
-3. Build e push da imagem Docker.
-4. Deploy em ambiente configurado.
+3. Deploy em ambiente configurado.
 
 Configure as credenciais do Docker no GitHub Actions e ajuste o arquivo conforme necessário.
+
+OBS: o action que vai rodar o deploy inicia após o merge da PR na main.
 ---

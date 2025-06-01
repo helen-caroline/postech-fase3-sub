@@ -3,8 +3,8 @@ version: '3.3'
 services:
   backend:
     build: 
-      context: .
-      dockerfile: src/Dockerfile
+      context: ../..
+      dockerfile: Docker/backend/Dockerfile
     container_name: backend
     ports:
       - "3000:3000"
