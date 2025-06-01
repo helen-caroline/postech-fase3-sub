@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  dependency-check:
+  build:
     runs-on: self-hosted
 
     steps:
@@ -24,7 +24,7 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install
-
+          
       # - name: Run Tests
       #   run: npm test
 
@@ -44,12 +44,10 @@ jobs:
         run: |
           sudo chmod 666 /var/run/docker.sock || true
           sudo usermod -aG docker $(whoami) || true
-      - name: Fix Docker Permissions
+
+      - name: Deploy Application
         run: |
           docker-compose -f /workspace/docker-compose.backend.yml down
           docker rmi workspace_backend
           docker-compose -f docker-compose.backend.yml build --no-cache
-
-      - name: Deploy Application
-        run: |
           docker-compose -f /workspace/docker-compose.backend.yml up -d
