@@ -5,7 +5,7 @@ FROM node:18
 WORKDIR /app
 
 # Copie os arquivos do projeto para o contêiner
-COPY ./src/ /app
+COPY . /app
 
 # Instale as dependências do projeto
 RUN npm install
