@@ -4,7 +4,7 @@ const controller = require('../../controllers/veiculos/controller');
 const middleware = require('../../middleware/veiculos/middleware');
 
 // GET
-router.get('/ver', controller.listarVeiculos);
+router.get('/viewer', controller.listarVeiculos);
 router.get('/available', controller.listarVeiculosDisponiveis);
 router.get('/sold', controller.listarVeiculosVendidos);
 
