@@ -93,14 +93,7 @@ execute os comandos no arquivo ``.init`` na raiz do projeto.
 - `GET /health`: Status da API.
 
 #### Rotas do Keycloak:
-- `POST /keycloak/login`: Autenticação via Keycloak.
-  - **Body**:
-    ```json
-    {
-      "username": "string",
-      "password": "string"
-    }
-    ```
+- `POST /keycloak/login`: Autenticação via Keycloak admin.
 - `POST /keycloak/login/:username`: Login com senha.
   - **Body**:
     ```json
@@ -109,22 +102,34 @@ execute os comandos no arquivo ``.init`` na raiz do projeto.
     }
     ```
 - `POST /keycloak/introspect/:username`: Introspecção de token.
-  - **Body**:
-    ```json
-    {
-      "token": "string"
-    }
-    ```
 - `POST /keycloak/logout/:username`: Logout de usuário.
-  - **Body**:
-    ```json
-    {
-      "token": "string"
-    }
-    ```
 
 #### Rotas de Veículos:
-- `GET /veiculos`: Listar veículos.
+- `GET /veiculos/viewer`: Listar veículos.
+- `GET /veiculos/sold`: Listar veiculos vendidos
+- `GET /veiculos/available`: Listar veiculos disponiveis
+- `GET /veiculos/create`: Criar um veiculo na base de dados
+  - **Body**:
+    ```json
+        {
+        "marca": "Nisan",
+        "modelo": "350z",
+        "ano": 2015,
+        "cor": "blanco",
+        "preco": 3000
+    }
+    ```
+- `GET /veiculos/update/veiculoID`: Listar veiculos disponiveis
+  - **Body**:
+    ```json
+    {
+        "marca": "Nissan",
+        "modelo": "350z",
+        "ano": 2016,
+        "cor": "branco",
+        "preco": 300000
+    }
+    ```
 
 #### Rotas de Usuários:
 - `GET /usuarios/get`: Buscar todos os usuários.
@@ -133,37 +138,62 @@ execute os comandos no arquivo ``.init`` na raiz do projeto.
   - **Body**:
     ```json
     {
-      "username": "string",
-      "email": "string",
-      "password": "string"
+        "attributes": {
+            "attribute_key": "valid_user"
+        },
+        "credentials": [
+            {
+                "temporary": false,
+                "type": "password",
+                "value": "admin321"
+            }
+        ],
+        "username": "valid_user",
+        "firstName": "",
+        "lastName": "",
+        "email": "valid_user@gmail.com",
+        "emailVerified": true,
+        "enabled": true
     }
     ```
 - `DELETE /usuarios/delete`: Deletar usuário.
   - **Body**:
     ```json
     {
-      "username": "string"
+        "userId": "2336656a-3ca2-447b-8914-f2785965e960"
     }
     ```
 - `PUT /usuarios/update`: Atualizar usuário.
   - **Body**:
     ```json
     {
-      "username": "string",
-      "email": "string",
-      "password": "string"
+        "userId": "2336656a-3ca2-447b-8914-f2785965e960",
+        "attributes": {
+            "attribute_key": "novo_username"
+        },
+        "credentials": [
+            {
+                "temporary": false,
+                "type": "password",
+                "value": "test3_password"
+            }
+        ],
+        "firstName": "Test3",
+        "lastName": "Admin3",
+        "email": "testadmin3@gmail.com",
+        "emailVerified": true,
+        "enabled": false
     }
     ```
 
 #### Rotas de Vendas:
 - `GET /vendas/sales`: Listar todas as vendas.
-- `POST /vendas/buy`: Registrar venda.
+- `POST /vendas/buy`: Comprar um veiculo.
   - **Body**:
     ```json
     {
-      "veiculoId": "string",
-      "compradorId": "string",
-      "valor": "number"
+        "username": "valid_user@gmail.com",
+        "veiculoId": 5
     }
     ```
 
