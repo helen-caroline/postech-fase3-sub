@@ -87,13 +87,88 @@ Configurando a base dados:
 execute os comandos no arquivo ``.init`` na raiz do projeto.
 
 ### Endpoints Disponíveis:
+
+#### Rotas Públicas:
 - `GET /`: Mensagem de boas-vindas.
 - `GET /health`: Status da API.
+
+#### Rotas do Keycloak:
 - `POST /keycloak/login`: Autenticação via Keycloak.
+  - **Body**:
+    ```json
+    {
+      "username": "string",
+      "password": "string"
+    }
+    ```
+- `POST /keycloak/login/:username`: Login com senha.
+  - **Body**:
+    ```json
+    {
+      "password": "string"
+    }
+    ```
+- `POST /keycloak/introspect/:username`: Introspecção de token.
+  - **Body**:
+    ```json
+    {
+      "token": "string"
+    }
+    ```
+- `POST /keycloak/logout/:username`: Logout de usuário.
+  - **Body**:
+    ```json
+    {
+      "token": "string"
+    }
+    ```
+
+#### Rotas de Veículos:
 - `GET /veiculos`: Listar veículos.
-- `POST /vendas`: Registrar venda.
+
+#### Rotas de Usuários:
+- `GET /usuarios/get`: Buscar todos os usuários.
+- `GET /usuarios/get/:username`: Buscar usuário pelo username.
+- `POST /usuarios/create`: Criar usuário.
+  - **Body**:
+    ```json
+    {
+      "username": "string",
+      "email": "string",
+      "password": "string"
+    }
+    ```
+- `DELETE /usuarios/delete`: Deletar usuário.
+  - **Body**:
+    ```json
+    {
+      "username": "string"
+    }
+    ```
+- `PUT /usuarios/update`: Atualizar usuário.
+  - **Body**:
+    ```json
+    {
+      "username": "string",
+      "email": "string",
+      "password": "string"
+    }
+    ```
+
+#### Rotas de Vendas:
+- `GET /vendas/sales`: Listar todas as vendas.
+- `POST /vendas/buy`: Registrar venda.
+  - **Body**:
+    ```json
+    {
+      "veiculoId": "string",
+      "compradorId": "string",
+      "valor": "number"
+    }
+    ```
 
 ---
+
 
 # Configurando o Runner com o github
 
