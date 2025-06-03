@@ -84,7 +84,7 @@ mysql -uroot -p
 Insira a senha: [`admin`]
 ```
 Configurando a base dados:
-execute os comandos no arquivo ``.init`` na raiz do projeto.
+execute os comandos no arquivo ``.init.sql`` na raiz do projeto.
 
 ### Endpoints Disponíveis:
 
